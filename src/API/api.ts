@@ -12,7 +12,7 @@ type BaseRequestType<D={}> = {
   data: D,
   messages: [],
   fieldsErrors: [],
-  resultCode: 0
+  resultCode: number
 }
 export type AuthMeRequestType = {
   id: number | null
