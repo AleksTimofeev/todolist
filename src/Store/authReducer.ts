@@ -1,33 +1,48 @@
 import {Dispatch} from "redux";
-import {apiAuth, AuthMeRequestType} from "../API/api";
+import {api, AuthMeRequestType} from "../API/api";
 
 
-type ActionsType = ReturnType<typeof authMeAC>
-type InitialStateType = AuthMeRequestType
+type ActionsType = ReturnType<typeof authMeAC> | ReturnType<typeof authDataLoading>
+type AuthDataLoadingType = {
+  authDataLoading: boolean
+}
+type InitialStateType = AuthMeRequestType & AuthDataLoadingType
+
 const initialState: InitialStateType = {
   id: null,
   login: null,
-  email: null
+  email: null,
+  authDataLoading: true
 }
 
-export const authReducer = (state = initialState, action: ActionsType) => {
+export const authReducer = (state = initialState, action: ActionsType): InitialStateType => {
   switch (action.type) {
 
-    case "AUTH_ME": return {
-      ...action.authData
-    }
+    case "AUTH_ME":
+      return {
+        ...state, ...action.authData
+      }
+    case "AUTH_DATA_LOADING":
+      return {
+        ...state, authDataLoading: action.value
+      }
 
-    default: return state
+    default:
+      return state
   }
 }
 
 const authMeAC = (authData: AuthMeRequestType) => ({authData, type: 'AUTH_ME'} as const)
+const authDataLoading = (value: boolean) => ({value, type: 'AUTH_DATA_LOADING'} as const)
 
 export const authMeTC = () => (dispatch: Dispatch) => {
-    apiAuth.authMe()
-      .then(data => {
-        if (data.resultCode === 0){
-          dispatch(authMeAC(data.data))
-        }
-      })
+  api.authMe()
+    .then(data => {
+      if (data.resultCode === 0) {
+        dispatch(authMeAC(data.data))
+        dispatch(authDataLoading(false))
+      } if (data.resultCode === 1){
+        dispatch(authDataLoading(false))
+      }
+    })
 }

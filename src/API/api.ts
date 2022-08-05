@@ -20,7 +20,7 @@ export type AuthMeRequestType = {
   email: string | null
 }
 
-export const apiAuth = {
+export const api = {
   authMe (){
     return instance.get<BaseRequestType<AuthMeRequestType>>('auth/me')
       .then(req => req.data)
