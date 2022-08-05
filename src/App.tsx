@@ -6,6 +6,7 @@ import {BrowserRouter} from "react-router-dom";
 import Header from "./Components/Header/Header";
 import Body from "./Components/Body/Body";
 import Footer from "./Components/Footer/Footer";
+import Login from "./Components/Logon/Login";
 
 
 function App() {
@@ -15,17 +16,21 @@ function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if(!authUserId){
+    if (!authUserId) {
       dispatch(authMeTC())
     }
-  },[])
+  }, [])
 
   return (
     <div>
       <BrowserRouter>
-        <Header />
-        <Body />
-        <Footer />
+        {authUserId ?
+          <>
+            <Header/>
+            <Body/>
+            <Footer/>
+          </> :
+          <Login/>}
       </BrowserRouter>
     </div>
   );
