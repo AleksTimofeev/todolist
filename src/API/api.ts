@@ -26,6 +26,23 @@ export type TodolistType = {
   addedDate: string
   order: number
 }
+export type TaskType = {
+  id: string
+  title: string
+  description: any
+  todoListId: string
+  order: number
+  status: number
+  priority: number
+  startDate: any
+  deadline: any
+  addedDate: string
+}
+export type TasksForTodolistType = {
+  items: Array<TaskType>
+  totalCount: number
+  error: null
+}
 
 export const api = {
   authMe (){
@@ -33,10 +50,14 @@ export const api = {
       withCredentials: true,
       headers: {"API-KEY": "8ed048a9-5b01-4cf3-8598-4c1e9e24f244"}
     })
-      .then(req => req.data)
+      .then(res => res.data)
   },
   getTodolists (){
     return instance.get<Array<TodolistType>>('todo-lists')
-      .then(req => req.data)
+      .then(res => res.data)
+  },
+  getTasksForTodolist (idTodolist: string){
+    return instance.get<TasksForTodolistType>(`todo-lists/${idTodolist}/tasks`)
+      .then(res => res.data)
   }
 }
