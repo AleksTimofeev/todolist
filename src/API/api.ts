@@ -29,13 +29,13 @@ export type TodolistType = {
 export type TaskType = {
   id: string
   title: string
-  description: any
+  description: string | null
   todoListId: string
   order: number
   status: number
   priority: number
-  startDate: any
-  deadline: any
+  startDate: string | null
+  deadline: string | null
   addedDate: string
 }
 export type TasksForTodolistType = {
@@ -56,8 +56,13 @@ export const api = {
     return instance.get<Array<TodolistType>>('todo-lists')
       .then(res => res.data)
   },
+  addTodolist (title: string){
+    return instance.post<BaseRequestType<{item: TodolistType}>>('todo-lists', {title: title})
+      .then(res => res.data)
+  },
   getTasksForTodolist (idTodolist: string){
     return instance.get<TasksForTodolistType>(`todo-lists/${idTodolist}/tasks`)
       .then(res => res.data)
-  }
+  },
+
 }

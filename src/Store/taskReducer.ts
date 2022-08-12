@@ -1,9 +1,9 @@
-import {getTodolistsAC} from "./todolistsReducer";
+import {addTodolistsAC, getTodolistsAC} from "./todolistsReducer";
 import {api, TaskType} from "../API/api";
 import {Dispatch} from "redux";
 
 
-type ActionsType = ReturnType<typeof getTodolistsAC> | ReturnType<typeof getTasksForTodolistAC>
+type ActionsType = ReturnType<typeof getTodolistsAC> | ReturnType<typeof getTasksForTodolistAC> | ReturnType<typeof addTodolistsAC>
 
 type InitialType = {
   [key: string]: Array<TaskType>
@@ -18,6 +18,9 @@ export const taskReducer = (state = initialState, action: ActionsType) => {
       const todolists:{[key: string]: []} = {}
       action.todolists.map(item => todolists[item.id] = [])
       return {...state, ...todolists}
+    case "ADD_TODOLIST": return {...state,
+      [action.todolist.id]: []
+    }
     case 'GET_TASKS_FOR_TODOLIST': return {...state,
       [action.idTodolist]: [...action.tasks]
     }
