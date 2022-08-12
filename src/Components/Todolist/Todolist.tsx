@@ -15,9 +15,7 @@ type PropsType = {
 const Todolist: React.FC<PropsType> = ({data}) => {
 
   const {title, id} = data
-
   const dispatch = useAppDispatch()
-
   const tasks = useSelector((state: AppStateType) => state.tasks[id])
 
   const handleRemoveTodolist = () => {
@@ -36,10 +34,10 @@ const Todolist: React.FC<PropsType> = ({data}) => {
     <div className={styles.todolistWrapper}>
       <div className={styles.todolistHeader}>
         <EditableText value={title} type={'title'} handleChangeText={handleChangeTitle}/>
-        <button onClick={handleRemoveTodolist}>X</button>
+        <button onClick={handleRemoveTodolist} title={'remove todolist'}>X</button>
       </div>
       {tasks.length > 0 && tasks.map(item => (
-        <Task key={item.id} {...item} />
+        <Task key={item.id} task={item}/>
       ))}
     </div>
   );

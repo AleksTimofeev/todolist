@@ -6,7 +6,8 @@ import {Dispatch} from "redux";
 type ActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof getTasksForTodolistAC> |
   ReturnType<typeof addTodolistsAC> |
-  ReturnType<typeof removeTodolistAC>
+  ReturnType<typeof removeTodolistAC> |
+  ReturnType<typeof updateTaskAC>
 
 type InitialType = {
   [key: string]: Array<TaskType>
@@ -33,6 +34,11 @@ export const taskReducer = (state = initialState, action: ActionsType) => {
     case "REMOVE_TODOLIST":
       delete state[action.idTodolist]
       return {...state}
+    case "UPDATE_TASK":
+      return {
+        ...state,
+        [action.task.todoListId]: [...state[action.task.todoListId].map(item => item.id === action.task.id ? {...action.task} : item)]
+      }
 
     default:
       return state
@@ -44,9 +50,19 @@ const getTasksForTodolistAC = (tasks: Array<TaskType>, idTodolist: string) => ({
   idTodolist,
   type: 'GET_TASKS_FOR_TODOLIST'
 } as const)
+const updateTaskAC = (task: TaskType) => ({task, type: 'UPDATE_TASK'} as const)
+
 export const getTasksForTodolist = (idTodolist: string) => (dispatch: Dispatch) => {
   api.getTasksForTodolist(idTodolist)
     .then(data => {
       dispatch(getTasksForTodolistAC(data.items, idTodolist))
+    })
+}
+export const updateTask = (task: TaskType) => (dispatch: Dispatch) => {
+  api.updateTask(task)
+    .then(data => {
+      if (data.resultCode === 0) {
+        dispatch(updateTaskAC(data.data.item))
+      }
     })
 }
