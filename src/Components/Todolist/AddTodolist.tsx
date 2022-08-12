@@ -23,7 +23,7 @@ const AddTodolist: React.FC<PropsType> = ({callbackOnEnter}) => {
 
   return (
     <div>
-      <input type={'text'} onChange={handleChange} onKeyPress={handleOnKeyPress} value={todolistTitle}/>
+      <input autoFocus type={'text'} onChange={handleChange} onKeyPress={handleOnKeyPress} value={todolistTitle}/>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {getTasksForTodolist} from "../../Store/taskReducer";
 import {useSelector} from "react-redux";
 import Task from "./Task/Task";
 import {removeTodolist} from "../../Store/todolistsReducer";
+import EditableText from "../EditableText/EditableText";
 
 type PropsType = {
   data: TodolistType
@@ -23,6 +24,10 @@ const Todolist: React.FC<PropsType> = ({data}) => {
     dispatch(removeTodolist(id))
   }
 
+  const handleChangeTitle = (title: string) => {
+
+  }
+
   useEffect(() => {
     dispatch(getTasksForTodolist(id))
   }, [])
@@ -30,7 +35,8 @@ const Todolist: React.FC<PropsType> = ({data}) => {
   return (
     <div className={styles.todolistWrapper}>
       <div className={styles.todolistHeader}>
-        <div className={styles.title}>{title}</div>
+        {/*<div className={styles.title}>{title}</div>*/}
+        <EditableText value={title} type={'title'} handleChangeText={handleChangeTitle}/>
         <button onClick={handleRemoveTodolist}>X</button>
       </div>
       {tasks.length > 0 && tasks.map(item => (
