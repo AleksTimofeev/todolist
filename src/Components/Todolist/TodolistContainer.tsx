@@ -13,7 +13,7 @@ const TodolistContainer = () => {
 
   const [showAddTodolistForm, setShowAddTodolistForm] = useState(false)
 
-  const handleClickAddtodolist = () => {
+  const handleClickAddTodolist = () => {
     setShowAddTodolistForm(true)
   }
 
@@ -28,7 +28,7 @@ const TodolistContainer = () => {
   return (
     <div className={styles.todolistContainer}>
       <div className={styles.headerTodolistContainer}>
-        <button onClick={handleClickAddtodolist}>add todolist</button>
+        <button onClick={handleClickAddTodolist}>add todolist</button>
         {showAddTodolistForm && <AddTodolist callbackOnEnter={callbackOnEnter}/>}
       </div>
       {todolists.length > 0 && todolists.map(item => (

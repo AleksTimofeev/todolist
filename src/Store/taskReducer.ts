@@ -7,7 +7,8 @@ type ActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof getTasksForTodolistAC> |
   ReturnType<typeof addTodolistsAC> |
   ReturnType<typeof removeTodolistAC> |
-  ReturnType<typeof updateTaskAC>
+  ReturnType<typeof updateTaskAC> |
+  ReturnType<typeof addTaskAC>
 
 type InitialType = {
   [key: string]: Array<TaskType>
@@ -39,6 +40,9 @@ export const taskReducer = (state = initialState, action: ActionsType) => {
         ...state,
         [action.task.todoListId]: [...state[action.task.todoListId].map(item => item.id === action.task.id ? {...action.task} : item)]
       }
+    case "ADD_TASK": return {...state,
+      [action.task.todoListId]: [...state[action.task.todoListId], {...action.task}]
+    }
 
     default:
       return state
@@ -51,6 +55,7 @@ const getTasksForTodolistAC = (tasks: Array<TaskType>, idTodolist: string) => ({
   type: 'GET_TASKS_FOR_TODOLIST'
 } as const)
 const updateTaskAC = (task: TaskType) => ({task, type: 'UPDATE_TASK'} as const)
+const addTaskAC = (task: TaskType) => ({task, type: 'ADD_TASK'} as const)
 
 export const getTasksForTodolist = (idTodolist: string) => (dispatch: Dispatch) => {
   api.getTasksForTodolist(idTodolist)
@@ -63,6 +68,14 @@ export const updateTask = (task: TaskType) => (dispatch: Dispatch) => {
     .then(data => {
       if (data.resultCode === 0) {
         dispatch(updateTaskAC(data.data.item))
+      }
+    })
+}
+export const addTask = (idTodolist: string, titleTask: string) => (dispatch:Dispatch) => {
+  api.addTask(idTodolist, titleTask)
+    .then(data => {
+      if(data.resultCode === 0){
+        dispatch(addTaskAC(data.data.item))
       }
     })
 }

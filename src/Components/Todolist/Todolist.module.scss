@@ -9,13 +9,24 @@
   flex-direction: row;
 }
 .todolistWrapper {
+  position: relative;
   width: 300px;
-  min-height: 200px;
+  min-height: 250px;
+  max-height: 250px;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   border: 1px solid black;
   border-radius: 5px;
   margin: 10px;
 }
+.tasksListWrapper {
+  overflow: scroll;
+}
+.tasksListWrapper::-webkit-scrollbar {
+  width: 0;
+}
+
 .todolistHeader {
   height: 40px;
   display: flex;
