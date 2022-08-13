@@ -1,6 +1,7 @@
 import {addTodolistsAC, getTodolistsAC, removeTodolistAC} from "./todolistsReducer";
 import {api, TaskType} from "../API/api";
 import {Dispatch} from "redux";
+import {log} from "util";
 
 
 type ActionsType = ReturnType<typeof getTodolistsAC> |
@@ -8,7 +9,8 @@ type ActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof addTodolistsAC> |
   ReturnType<typeof removeTodolistAC> |
   ReturnType<typeof updateTaskAC> |
-  ReturnType<typeof addTaskAC>
+  ReturnType<typeof addTaskAC> |
+  ReturnType<typeof removeTaskAC>
 
 type InitialType = {
   [key: string]: Array<TaskType>
@@ -43,6 +45,9 @@ export const taskReducer = (state = initialState, action: ActionsType) => {
     case "ADD_TASK": return {...state,
       [action.task.todoListId]: [...state[action.task.todoListId], {...action.task}]
     }
+    case 'REMOVE_TASK': return {...state,
+      [action.idTodolist]: [...state[action.idTodolist].filter(item => item.id !== action.idTask)]
+    }
 
     default:
       return state
@@ -56,6 +61,7 @@ const getTasksForTodolistAC = (tasks: Array<TaskType>, idTodolist: string) => ({
 } as const)
 const updateTaskAC = (task: TaskType) => ({task, type: 'UPDATE_TASK'} as const)
 const addTaskAC = (task: TaskType) => ({task, type: 'ADD_TASK'} as const)
+const removeTaskAC = (idTodolist: string, idTask: string) => ({idTodolist, idTask, type: 'REMOVE_TASK'} as const)
 
 export const getTasksForTodolist = (idTodolist: string) => (dispatch: Dispatch) => {
   api.getTasksForTodolist(idTodolist)
@@ -78,4 +84,13 @@ export const addTask = (idTodolist: string, titleTask: string) => (dispatch:Disp
         dispatch(addTaskAC(data.data.item))
       }
     })
+}
+export const removeTask = (idTodolist: string, idTask: string) => (dispatch: Dispatch) => {
+  api.removeTask(idTodolist, idTask)
+    .then(data => {
+      if(data.resultCode === 0){
+        dispatch(removeTaskAC(idTodolist, idTask))
+      }
+    })
+    .catch(error => console.log(error))
 }

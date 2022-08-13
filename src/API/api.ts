@@ -79,5 +79,9 @@ export const api = {
     return instance.put<BaseRequestType<{item: TaskType}>>(`todo-lists/${task.todoListId}/tasks/${task.id}`, {...task})
       .then(res => res.data)
   },
+  removeTask (idTodolist: string, idTask: string){
+    return instance.delete<BaseRequestType>(`todo-lists/${idTodolist}/tasks/${idTask}`)
+      .then(res => res.data)
+  }
 
 }

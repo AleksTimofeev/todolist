@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styles from './Todolist.module.scss'
-import {TodolistType} from "../../API/api";
+import {TaskType, TodolistType} from "../../API/api";
 import {AppStateType, useAppDispatch} from "../../Store/store";
 import {getTasksForTodolist} from "../../Store/taskReducer";
 import {useSelector} from "react-redux";
@@ -17,8 +17,7 @@ const Todolist: React.FC<PropsType> = ({data}) => {
 
   const {title, id} = data
   const dispatch = useAppDispatch()
-  const tasks = useSelector((state: AppStateType) => state.tasks[id])
-  const [showAddTaskForm, setShowAddTaskForm] = useState(false)
+  const taskList = useSelector((state: AppStateType):Array<TaskType> => state.tasks[id])
 
   const handleRemoveTodolist = () => {
     dispatch(removeTodolist(id))
@@ -28,7 +27,6 @@ const Todolist: React.FC<PropsType> = ({data}) => {
     dispatch(updateTodolist(id, title))
   }
 
-  const handleAddTask = () => {}
 
   useEffect(() => {
     dispatch(getTasksForTodolist(id))
@@ -45,7 +43,7 @@ const Todolist: React.FC<PropsType> = ({data}) => {
         <AddTask idTodolist={id} />
       </div>
       <div className={styles.tasksListWrapper}>
-      {tasks.length > 0 && tasks.map(item => (
+      {taskList.length > 0 && taskList.map(item => (
         <Task key={item.id} task={item}/>
       ))}
       </div>
