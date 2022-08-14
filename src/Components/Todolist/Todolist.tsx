@@ -19,6 +19,7 @@ const Todolist: React.FC<PropsType> = ({data}) => {
   const idTodolist = data.id
   const dispatch = useAppDispatch()
   const taskList = useSelector((state: AppStateType):Array<TaskType> => state.tasks[idTodolist])
+  console.log(taskList)
 
   const handleClickRemoveTodolist = () => {
     dispatch(removeTodolist(idTodolist))

@@ -18,7 +18,7 @@ type InitialType = {
 
 const initialState: InitialType = {}
 
-export const taskReducer = (state = initialState, action: ActionsType) => {
+export const taskReducer = (state = initialState, action: ActionsType): InitialType => {
   switch (action.type) {
     case 'GET_TODOLISTS':
       const todolists: { [key: string]: [] } = {}
@@ -59,9 +59,9 @@ const getTasksForTodolistAC = (tasks: Array<TaskType>, idTodolist: string) => ({
   idTodolist,
   type: 'GET_TASKS_FOR_TODOLIST'
 } as const)
-const updateTaskAC = (task: TaskType) => ({task, type: 'UPDATE_TASK'} as const)
-const addTaskAC = (task: TaskType) => ({task, type: 'ADD_TASK'} as const)
-const removeTaskAC = (idTodolist: string, idTask: string) => ({idTodolist, idTask, type: 'REMOVE_TASK'} as const)
+export const updateTaskAC = (task: TaskType) => ({task, type: 'UPDATE_TASK'} as const)
+export const addTaskAC = (task: TaskType) => ({task, type: 'ADD_TASK'} as const)
+export const removeTaskAC = (idTodolist: string, idTask: string) => ({idTodolist, idTask, type: 'REMOVE_TASK'} as const)
 
 export const getTasksForTodolist = (idTodolist: string) => (dispatch: Dispatch) => {
   api.getTasksForTodolist(idTodolist)
