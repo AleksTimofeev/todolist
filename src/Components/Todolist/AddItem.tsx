@@ -1,12 +1,11 @@
 import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useState} from 'react';
-import {useAppDispatch} from "../../../Store/store";
-import {addTask} from "../../../Store/taskReducer";
+import {useAppDispatch} from "../../Store/store";
 
 type PropsType = {
-  idTodolist: string
+  callbackAddItem: (title: string) => void
 }
 
-const AddTask: React.FC<PropsType> = ({idTodolist}) => {
+const AddItem: React.FC<PropsType> = ({callbackAddItem}) => {
 
   const dispatch = useAppDispatch()
 
@@ -18,14 +17,14 @@ const AddTask: React.FC<PropsType> = ({idTodolist}) => {
   }
   const handleOnEnter = (e: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
     if(e.key === 'Enter' && value.length > 2){
-      dispatch(addTask(idTodolist, value))
+      callbackAddItem(value)
       setValue('')
       setShowForm(false)
     }
   }
   const handleBlur = () => {
     setValue('')
-    setShowForm(false)
+    // setShowForm(false)
   }
 
   return (
@@ -40,10 +39,10 @@ const AddTask: React.FC<PropsType> = ({idTodolist}) => {
           onKeyPress={handleOnEnter}
           onBlur={handleBlur}
         /> :
-        <button title={'add task'} onClick={() => setShowForm(true)}>+</button>
+        <button title={'add'} onClick={() => setShowForm(true)}>+</button>
       }
     </div>
   );
 };
 
-export default AddTask;
+export default AddItem;

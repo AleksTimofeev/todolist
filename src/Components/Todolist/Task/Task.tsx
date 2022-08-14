@@ -2,30 +2,29 @@ import React from 'react';
 import {TaskType} from "../../../API/api";
 import styles from './Task.module.scss'
 import EditableText from "../../EditableText/EditableText";
-import {removeTask, updateTask} from "../../../Store/taskReducer";
-import {useAppDispatch} from "../../../Store/store";
 
 type PropsType = {
   task: TaskType
+  callbackUpdateTask: (newTask: TaskType) => void
+  callbackRemoveTask: (idTask: string) => void
 }
 
-const Task: React.FC<PropsType> = (props) => {
+const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask}) => {
 
-  const dispatch = useAppDispatch()
-
-  const handleUpdateTask = (text: string) => {
-    if (text.length > 2) {
-      dispatch(updateTask({...props.task, title: text}))
+  const updateTask = (title: string) => {
+    if (title.length > 2) {
+      const newTask = {...task, title}
+      callbackUpdateTask(newTask)
     }
   }
-  const handleRemoveTask = () => {
-    dispatch(removeTask(props.task.todoListId, props.task.id))
+  const removeTask = () => {
+    callbackRemoveTask(task.id)
   }
 
   return (
     <div className={styles.wrapper}>
-      <EditableText value={props.task.title} type={'text'} handleChangeText={handleUpdateTask}/>
-      <button onClick={handleRemoveTask}>X</button>
+      <EditableText value={task.title} type={'text'} handleChangeText={updateTask}/>
+      <button onClick={removeTask}>X</button>
     </div>
 
   );

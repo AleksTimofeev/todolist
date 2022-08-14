@@ -82,6 +82,5 @@ export const api = {
   removeTask (idTodolist: string, idTask: string){
     return instance.delete<BaseRequestType>(`todo-lists/${idTodolist}/tasks/${idTask}`)
       .then(res => res.data)
-  }
-
+  },
 }

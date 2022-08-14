@@ -1,24 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
 import {AppStateType, useAppDispatch} from "../../Store/store";
-import {getTodolists} from "../../Store/todolistsReducer";
+import {addTodolist, getTodolists} from "../../Store/todolistsReducer";
 import Todolist from "./Todolist";
 import styles from './Todolist.module.scss'
-import AddTodolist from "./AddTodolist";
+import AddItem from "./AddItem";
 
 const TodolistContainer = () => {
 
   const dispatch = useAppDispatch()
   const todolists = useSelector((state: AppStateType) => state.todolists)
 
-  const [showAddTodolistForm, setShowAddTodolistForm] = useState(false)
-
-  const handleClickAddTodolist = () => {
-    setShowAddTodolistForm(true)
-  }
-
-  const callbackOnEnter = () => {
-    setShowAddTodolistForm(false)
+  const callbackAddTodolist = (title: string) => {
+    dispatch(addTodolist(title))
   }
 
   useEffect(() => {
@@ -28,8 +22,7 @@ const TodolistContainer = () => {
   return (
     <div className={styles.todolistContainer}>
       <div className={styles.headerTodolistContainer}>
-        <button onClick={handleClickAddTodolist}>add todolist</button>
-        {showAddTodolistForm && <AddTodolist callbackOnEnter={callbackOnEnter}/>}
+        <AddItem callbackAddItem={callbackAddTodolist} />
       </div>
       {todolists.length > 0 && todolists.map(item => (
         <Todolist key={item.id} data={item}/>
