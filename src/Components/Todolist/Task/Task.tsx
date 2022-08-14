@@ -23,7 +23,10 @@ const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask
 
   return (
     <div className={styles.wrapper}>
-      <EditableText value={task.title} type={'text'} handleChangeText={updateTask}/>
+      <EditableText
+        className={styles.task}
+        value={task.title}
+        handleChangeText={updateTask}/>
       <button onClick={removeTask}>X</button>
     </div>
 

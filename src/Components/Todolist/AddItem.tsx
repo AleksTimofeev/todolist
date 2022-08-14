@@ -1,13 +1,10 @@
 import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useState} from 'react';
-import {useAppDispatch} from "../../Store/store";
 
 type PropsType = {
   callbackAddItem: (title: string) => void
 }
 
 const AddItem: React.FC<PropsType> = ({callbackAddItem}) => {
-
-  const dispatch = useAppDispatch()
 
   const [showForm, setShowForm] = useState<boolean>(false)
   const [value, setValue] = useState<string>('')
@@ -24,7 +21,7 @@ const AddItem: React.FC<PropsType> = ({callbackAddItem}) => {
   }
   const handleBlur = () => {
     setValue('')
-    // setShowForm(false)
+    setShowForm(false)
   }
 
   return (

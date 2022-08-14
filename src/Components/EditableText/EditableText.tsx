@@ -1,8 +1,7 @@
-import React, {ChangeEvent, KeyboardEventHandler, useState} from 'react';
+import React, {ChangeEvent, ReactChildren, ReactElement, useState} from 'react';
 
 type PropsType = {
   value: string
-  type: 'title' | 'text'
   className?: string
   handleChangeText: (title: string) => void
 }
@@ -30,21 +29,21 @@ const EditableText: React.FC<PropsType> = (props) => {
     setValue(props.value)
   }
 
-  const text = props.type === 'title' ? <h3 className={props.className}>{value}</h3> : <span className={props.className}>{value}</span>
 
   return (
-    <>
+    <div className={props.className}>
       {editMode ?
         <input
+          className={props.className}
           autoFocus
           value={value}
           onChange={handleChange}
           onKeyPress={handleKeyPress}
           onBlur={handleBlur}
         /> :
-        <div onDoubleClick={handleDoubleClick}>{text}</div>
+        <span onDoubleClick={handleDoubleClick}>{props.value}</span>
       }
-    </>
+    </div>
   );
 };
 

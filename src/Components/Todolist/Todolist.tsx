@@ -43,7 +43,7 @@ const Todolist: React.FC<PropsType> = ({data}) => {
   return (
     <div className={styles.todolistWrapper}>
       <div className={styles.todolistHeader}>
-        <EditableText value={title} type={'title'} handleChangeText={callbackUpdateTodolist}/>
+        <EditableText value={title} handleChangeText={callbackUpdateTodolist}/>
         <button onClick={handleClickRemoveTodolist} title={'remove todolist'}>X</button>
       </div>
       <div>
