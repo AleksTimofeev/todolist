@@ -10,7 +10,7 @@ const instance = axios.create({
 
 type BaseRequestType<D = {}> = {
   data: D,
-  messages: [],
+  messages: Array<string>,
   fieldsErrors: [],
   resultCode: number
 }

@@ -1,5 +1,6 @@
 import {api, TodolistType} from "../API/api";
 import {Dispatch} from "redux";
+import {AxiosError} from "axios";
 
 type ActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof addTodolistsAC> |
@@ -23,11 +24,15 @@ export const getTodolistsAC = (todolists: Array<TodolistType>) => ({todolists, t
 export const addTodolistsAC = (todolist: TodolistType) => ({todolist, type: 'ADD_TODOLIST'} as const)
 export const updateTodolistAC = (idTodolist: string, title: string) => ({idTodolist, title, type: 'UPDATE_TODOLIST'} as const)
 export const removeTodolistAC = (idTodolist: string) => ({idTodolist, type: 'REMOVE_TODOLIST'} as const)
+export const getTodolistError = (message: string) => ({type: '', message})
 
 export const getTodolists = () => (dispatch: Dispatch) => {
   api.getTodolists()
     .then(data => {
       dispatch(getTodolistsAC(data))
+    })
+    .catch(error => {
+      // dispatch()
     })
 }
 
