@@ -1,20 +1,22 @@
-import {appReducer, RequestStatusType, setStatusAC} from "./appReducer";
+import {appReducer, RequestStatusType, setStatusTodolistsAC} from "./appReducer";
 
 
 let initialState = {
-  status: 'loading' as RequestStatusType
+  statusTodolists: 'loading' as RequestStatusType,
+  statusTasks: 'loading' as RequestStatusType
 }
 
 
 beforeEach(() => {
   initialState = {
-    status: 'loading'
+    statusTodolists: 'loading',
+    statusTasks: 'loading'
   }
 })
 
 test('loading todolists successfully',() => {
-  const action = setStatusAC('succeeded')
+  const action = setStatusTodolistsAC('succeeded')
   const newState = appReducer(initialState, action)
 
-  expect(newState.status).toBe('succeeded')
+  expect(newState.statusTodolists).toBe('succeeded')
 })

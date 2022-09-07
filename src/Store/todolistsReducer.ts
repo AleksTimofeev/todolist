@@ -1,6 +1,7 @@
 import {api, TodolistType} from "../API/api";
 import {Dispatch} from "redux";
 import {AxiosError} from "axios";
+import {setStatusTodolistsAC} from "./appReducer";
 
 type ActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof addTodolistsAC> |
@@ -24,12 +25,14 @@ export const getTodolistsAC = (todolists: Array<TodolistType>) => ({todolists, t
 export const addTodolistsAC = (todolist: TodolistType) => ({todolist, type: 'ADD_TODOLIST'} as const)
 export const updateTodolistAC = (idTodolist: string, title: string) => ({idTodolist, title, type: 'UPDATE_TODOLIST'} as const)
 export const removeTodolistAC = (idTodolist: string) => ({idTodolist, type: 'REMOVE_TODOLIST'} as const)
-export const getTodolistError = (message: string) => ({type: '', message})
+
 
 export const getTodolists = () => (dispatch: Dispatch) => {
+  dispatch(setStatusTodolistsAC('loading'))
   api.getTodolists()
     .then(data => {
       dispatch(getTodolistsAC(data))
+      dispatch(setStatusTodolistsAC('succeeded'))
     })
     .catch(error => {
       // dispatch()
@@ -37,28 +40,35 @@ export const getTodolists = () => (dispatch: Dispatch) => {
 }
 
 export const addTodolist = (title: string) => (dispatch: Dispatch) => {
+  dispatch(setStatusTodolistsAC('loading'))
   api.addTodolist(title)
     .then(data => {
       if(data.resultCode === 0){
         dispatch(addTodolistsAC(data.data.item))
+        dispatch(setStatusTodolistsAC('succeeded'))
       }
     })
 }
 
 export const updateTodolist = (idTodolist: string, title: string) => (dispatch: Dispatch) => {
+  dispatch(setStatusTodolistsAC('loading'))
   api.updateTodolist(idTodolist, title)
     .then(data => {
       if(data.resultCode === 0){
         dispatch(updateTodolistAC(idTodolist, title))
+        dispatch(setStatusTodolistsAC('succeeded'))
+
       }
     })
 }
 
 export const removeTodolist = (idTodolist: string) => (dispatch: Dispatch) => {
+  dispatch(setStatusTodolistsAC('loading'))
   api.removeTodolist(idTodolist)
     .then(data => {
       if(data.resultCode === 0){
         dispatch(removeTodolistAC(idTodolist))
+        dispatch(setStatusTodolistsAC('succeeded'))
       }
     })
 }
