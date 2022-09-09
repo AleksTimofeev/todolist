@@ -1,15 +1,29 @@
-import {TodolistType} from "../API/api";
-import {addTodolistsAC, removeTodolistAC, todolistsReducer, updateTodolistAC} from "./todolistsReducer";
+
+import {
+  addTodolistsAC,
+  FullTodolistType,
+  removeTodolistAC,
+  todolistsReducer,
+  updateTodolistAC
+} from "./todolistsReducer";
 
 
-let initialState: Array<TodolistType> = []
+let initialState: FullTodolistType = []
 
 beforeEach(() => {
   initialState = [
-    {id: '001', title: 'title 001', addedDate: '01.01.01', order: 1},
-    {id: '002', title: 'title 002', addedDate: '01.01.01', order: 1},
-    {id: '003', title: 'title 003', addedDate: '01.01.01', order: 1},
-    {id: '004', title: 'title 004', addedDate: '01.01.01', order: 1},
+    {id: '001', title: 'title 001', addedDate: '01.01.01',
+      order: 1, statusGetTaskForTodolist: "idle", statusRemoveTodolist: "idle", statusRemoveTask: 'idle'
+    },
+    {id: '002', title: 'title 002', addedDate: '01.01.01',
+      order: 1, statusGetTaskForTodolist: "idle", statusRemoveTodolist: "idle", statusRemoveTask: 'idle'
+    },
+    {id: '003', title: 'title 003', addedDate: '01.01.01',
+      order: 1, statusGetTaskForTodolist: "idle", statusRemoveTodolist: "idle", statusRemoveTask: 'idle'
+    },
+    {id: '004', title: 'title 004', addedDate: '01.01.01',
+      order: 1, statusGetTaskForTodolist: "idle", statusRemoveTodolist: "idle", statusRemoveTask: 'idle'
+    },
   ]
 })
 

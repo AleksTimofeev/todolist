@@ -1,6 +1,13 @@
-import {addTodolistsAC, getTodolistsAC, removeTodolistAC} from "./todolistsReducer";
+import {
+  addTodolistsAC,
+  changeStatusGetTaskForTodolist,
+  changeStatusRemoveTaskAC,
+  getTodolistsAC,
+  removeTodolistAC
+} from "./todolistsReducer";
 import {api, TaskType} from "../API/api";
 import {Dispatch} from "redux";
+import {RequestStatusType} from "./appReducer";
 
 
 type ActionsType = ReturnType<typeof getTodolistsAC> |
@@ -10,6 +17,7 @@ type ActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof updateTaskAC> |
   ReturnType<typeof addTaskAC> |
   ReturnType<typeof removeTaskAC>
+
 
 type InitialType = {
   [key: string]: Array<TaskType>
@@ -63,9 +71,11 @@ export const addTaskAC = (task: TaskType) => ({task, type: 'ADD_TASK'} as const)
 export const removeTaskAC = (idTodolist: string, idTask: string) => ({idTodolist, idTask, type: 'REMOVE_TASK'} as const)
 
 export const getTasksForTodolist = (idTodolist: string) => (dispatch: Dispatch) => {
+  dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
   api.getTasksForTodolist(idTodolist)
     .then(data => {
       dispatch(getTasksForTodolistAC(data.items, idTodolist))
+      dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
     })
 }
 export const updateTask = (task: TaskType) => (dispatch: Dispatch) => {
@@ -77,18 +87,24 @@ export const updateTask = (task: TaskType) => (dispatch: Dispatch) => {
     })
 }
 export const addTask = (idTodolist: string, titleTask: string) => (dispatch:Dispatch) => {
+  dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
   api.addTask(idTodolist, titleTask)
     .then(data => {
       if(data.resultCode === 0){
         dispatch(addTaskAC(data.data.item))
+        dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
       }
     })
 }
 export const removeTask = (idTodolist: string, idTask: string) => (dispatch: Dispatch) => {
+  dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
+  dispatch(changeStatusRemoveTaskAC(idTodolist, 'loading'))
   api.removeTask(idTodolist, idTask)
     .then(data => {
       if(data.resultCode === 0){
         dispatch(removeTaskAC(idTodolist, idTask))
+        dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
+        dispatch(changeStatusRemoveTaskAC(idTodolist, 'succeeded'))
       }
     })
     .catch(error => console.log(error))

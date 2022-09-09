@@ -3,14 +3,16 @@ import {TaskType} from "../../../API/api";
 import styles from './Task.module.scss'
 import EditableText from "../../EditableText/EditableText";
 import TaskDescription from "./TaskDescription";
+import {RequestStatusType} from "../../../Store/appReducer";
 
 type PropsType = {
   task: TaskType
   callbackUpdateTask: (newTask: TaskType) => void
   callbackRemoveTask: (idTask: string) => void
+  statusRemoveTask: RequestStatusType
 }
 
-const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask}) => {
+const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask, statusRemoveTask}) => {
 
   const [showDescription, setShowDescription] = useState(false)
 
@@ -37,7 +39,7 @@ const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask
       {/*  value={task.title}*/}
       {/*  handleChangeText={updateTask}/>*/}
       {showDescription ? <TaskDescription data={task} /> : <span>{task.title}</span>}
-      <button onClick={removeTask}>X</button>
+      <button disabled={statusRemoveTask === 'loading'} onClick={removeTask}>X</button>
     </div>
 
   );

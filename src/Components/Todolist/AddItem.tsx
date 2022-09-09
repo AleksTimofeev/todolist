@@ -1,10 +1,14 @@
 import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useState} from 'react';
+import {Button} from "@mui/material";
 
 type PropsType = {
+  title?: string
   callbackAddItem: (title: string) => void
+  size?: 'small' | 'medium' | 'large'
+  disabled?: boolean
 }
 
-const AddItem: React.FC<PropsType> = ({callbackAddItem}) => {
+const AddItem: React.FC<PropsType> = ({callbackAddItem, title, size, disabled}) => {
 
   const [showForm, setShowForm] = useState<boolean>(false)
   const [value, setValue] = useState<string>('')
@@ -35,8 +39,15 @@ const AddItem: React.FC<PropsType> = ({callbackAddItem}) => {
           onChange={handleChange}
           onKeyPress={handleOnEnter}
           onBlur={handleBlur}
-        /> :
-        <button title={'add'} onClick={() => setShowForm(true)}>+</button>
+        /> :<>
+          <Button variant={'outlined'}
+                  size={size ? size : 'medium'}
+                  onClick={() => setShowForm(true)}
+                  disabled={disabled}
+          >
+            {title}
+          </Button>
+        </>
       }
     </div>
   );

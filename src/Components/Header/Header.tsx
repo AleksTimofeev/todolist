@@ -24,8 +24,8 @@ const Header = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              News
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} >
+              Todolist
             </Typography>
             <Button color="inherit">Login</Button>
           </Toolbar>

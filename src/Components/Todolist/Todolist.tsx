@@ -8,17 +8,26 @@ import Task from "./Task/Task";
 import {removeTodolist, updateTodolist} from "../../Store/todolistsReducer";
 import EditableText from "../EditableText/EditableText";
 import AddItem from './AddItem';
+import {RequestStatusType} from "../../Store/appReducer";
+import {LinearProgress} from "@mui/material";
 
 type PropsType = {
   data: TodolistType
+  statusGetTaskForTodolist: RequestStatusType
+  statusRemoveTodolist: RequestStatusType
+  statusRemoveTask: RequestStatusType
 }
 
-const Todolist: React.FC<PropsType> = ({data}) => {
+const Todolist: React.FC<PropsType> = ({data,
+                                         statusGetTaskForTodolist,
+                                         statusRemoveTodolist,
+                                         statusRemoveTask
+}) => {
 
   const {title} = data
   const idTodolist = data.id
   const dispatch = useAppDispatch()
-  const taskList = useSelector((state: AppStateType):Array<TaskType> => state.tasks[idTodolist])
+  const taskList = useSelector((state: AppStateType): Array<TaskType> => state.tasks[idTodolist])
 
   const handleClickRemoveTodolist = () => {
     dispatch(removeTodolist(idTodolist))
@@ -43,20 +52,35 @@ const Todolist: React.FC<PropsType> = ({data}) => {
   return (
     <div className={styles.todolistWrapper}>
       <div className={styles.todolistHeader}>
-        <EditableText value={title} handleChangeText={callbackUpdateTodolist}/>
-        <button onClick={handleClickRemoveTodolist} title={'remove todolist'}>X</button>
+        {statusGetTaskForTodolist === 'loading' ?
+          <h3>Loading</h3> :
+          <EditableText value={title} handleChangeText={callbackUpdateTodolist}/>
+        }
+        <button onClick={handleClickRemoveTodolist}
+                title={'remove todolist'}
+                disabled={statusRemoveTodolist === 'loading'}
+        >
+          X
+        </button>
       </div>
+      {statusGetTaskForTodolist === 'loading' && <LinearProgress/>}
       <div>
-        <AddItem callbackAddItem={callbackAddTask} />
+        <AddItem callbackAddItem={callbackAddTask}
+                 title={'Add Task'}
+                 size={'small'}
+                 disabled={statusGetTaskForTodolist === 'loading'}
+        />
       </div>
       <div className={styles.tasksListWrapper}>
-      {taskList.length > 0 && taskList.map(item => (
-        <Task
-          key={item.id}
-          task={item}
-          callbackUpdateTask={callbackUpdateTask}
-          callbackRemoveTask={callbackRemoveTask}/>
-      ))}
+        {taskList.length > 0 && taskList.map(item => (
+          <Task
+            key={item.id}
+            task={item}
+            callbackUpdateTask={callbackUpdateTask}
+            callbackRemoveTask={callbackRemoveTask}
+            statusRemoveTask={statusRemoveTask}
+          />
+        ))}
       </div>
     </div>
   );
