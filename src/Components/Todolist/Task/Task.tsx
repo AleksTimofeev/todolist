@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {TaskType} from "../../../API/api";
 import styles from './Task.module.scss'
-import EditableText from "../../EditableText/EditableText";
+import EditableSpan from "../../EditableSpan/EditableSpan";
 import TaskDescription from "./TaskDescription";
 import {RequestStatusType} from "../../../Store/appReducer";
+import IconButton from "@mui/material/IconButton";
+import {Delete} from "@mui/icons-material";
 
 type PropsType = {
   task: TaskType
@@ -34,12 +36,18 @@ const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask
 
   return (
     <div onDoubleClick={handleShowDescription} className={`${styles.wrapper} ${style}`}>
-      {/*<EditableText*/}
-      {/*  className={styles.task}*/}
-      {/*  value={task.title}*/}
-      {/*  handleChangeText={updateTask}/>*/}
-      {showDescription ? <TaskDescription data={task} /> : <span>{task.title}</span>}
-      <button disabled={statusRemoveTask === 'loading'} onClick={removeTask}>X</button>
+      <EditableSpan
+        className={styles.task}
+        value={task.title}
+        handleChangeText={updateTask}/>
+      {/*{showDescription ? <TaskDescription data={task} /> : <span>{task.title}</span>}*/}
+      {/*<button disabled={statusRemoveTask === 'loading'} onClick={removeTask}>X</button>*/}
+      <IconButton
+        size={'small'}
+        disabled={statusRemoveTask === 'loading'} onClick={removeTask}
+      >
+        <Delete />
+      </IconButton>
     </div>
 
   );

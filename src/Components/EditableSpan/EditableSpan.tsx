@@ -1,4 +1,5 @@
-import React, {ChangeEvent, ReactChildren, ReactElement, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
+import {TextField} from "@mui/material";
 
 type PropsType = {
   value: string
@@ -7,7 +8,7 @@ type PropsType = {
 }
 
 
-const EditableText: React.FC<PropsType> = (props) => {
+const EditableSpan: React.FC<PropsType> = (props) => {
 
   const [editMode, setEditMode] = useState<boolean>(false)
   const [value, setValue] = useState<string>(props.value)
@@ -33,7 +34,9 @@ const EditableText: React.FC<PropsType> = (props) => {
   return (
     <div className={props.className}>
       {editMode ?
-        <input
+        <TextField
+          variant="standard"
+          size={'small'}
           className={props.className}
           autoFocus
           value={value}
@@ -47,4 +50,4 @@ const EditableText: React.FC<PropsType> = (props) => {
   );
 };
 
-export default EditableText;
+export default EditableSpan;

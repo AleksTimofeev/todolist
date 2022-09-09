@@ -1,8 +1,10 @@
 .wrapper {
+  min-height: 45px;
   display: flex;
   justify-content: space-between;
-  margin: 5px;
-  padding: 5px 10px;
+  align-items: center;
+  margin: 5px 0;
+  padding: 0 10px;
   border-radius: 5px;
   background: #bebebe;
 
@@ -14,19 +16,5 @@
   background: orange;
 }
 .low {
-  background: cornflowerblue;
-}
-.task {
-
-  input {
-    border: none;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background: #d3d3d3;
-    border-radius: 3px;
-  }
-  input:focus-visible {
-    outline: none;
-  }
+  background: #d4d4d4;
 }

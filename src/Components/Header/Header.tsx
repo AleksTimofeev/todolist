@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <div>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{flexGrow: 1}}>
         <AppBar position="static">
           <Toolbar>
             <IconButton
@@ -20,18 +20,20 @@ const Header = () => {
               edge="start"
               color="inherit"
               aria-label="menu"
-              sx={{ mr: 2 }}
+              sx={{mr: 2}}
             >
-              <MenuIcon />
+              <MenuIcon/>
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} >
+            <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
               Todolist
             </Typography>
             <Button color="inherit">Login</Button>
           </Toolbar>
         </AppBar>
       </Box>
-      {statusTodolistLoading === 'loading' && <LinearProgress/>}
+      <div className={styles.loadingLinear}>
+        {statusTodolistLoading === 'loading' && <LinearProgress/>}
+      </div>
 
     </div>
   );

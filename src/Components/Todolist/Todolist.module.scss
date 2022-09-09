@@ -2,6 +2,7 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 .headerTodolistContainer {
   width: 100%;
@@ -11,28 +12,20 @@
 .todolistWrapper {
   position: relative;
   width: 300px;
-  min-height: 250px;
-  max-height: 250px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   border: 1px solid black;
   border-radius: 5px;
   margin: 10px;
-}
-.tasksListWrapper {
-  overflow: scroll;
-}
-.tasksListWrapper::-webkit-scrollbar {
-  width: 0;
+  padding: 0 10px;
 }
 
 .todolistHeader {
-  height: 40px;
+  height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
   border-bottom: 1px solid black;
 }
 .title {
@@ -41,4 +34,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.loadingLinear {
+  height: 4px;
+}
+.addTask {
+  display: flex;
+  margin-bottom: 10px;
 }

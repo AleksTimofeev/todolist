@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useEffect, useState} from 'react';
 import styles from './Todolist.module.scss'
 import {TaskType, TodolistType} from "../../API/api";
 import {AppStateType, useAppDispatch} from "../../Store/store";
@@ -6,37 +6,56 @@ import {addTask, getTasksForTodolist, removeTask, updateTask} from "../../Store/
 import {useSelector} from "react-redux";
 import Task from "./Task/Task";
 import {removeTodolist, updateTodolist} from "../../Store/todolistsReducer";
-import EditableText from "../EditableText/EditableText";
-import AddItem from './AddItem';
 import {RequestStatusType} from "../../Store/appReducer";
-import {LinearProgress} from "@mui/material";
+import {LinearProgress, TextField} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import {AddCircle, Delete} from "@mui/icons-material";
+import EditableSpan from "../EditableSpan/EditableSpan";
 
 type PropsType = {
   data: TodolistType
   statusGetTaskForTodolist: RequestStatusType
   statusRemoveTodolist: RequestStatusType
   statusRemoveTask: RequestStatusType
+  statusAddTask: RequestStatusType
 }
 
-const Todolist: React.FC<PropsType> = ({data,
+const Todolist: React.FC<PropsType> = ({
+                                         data,
                                          statusGetTaskForTodolist,
                                          statusRemoveTodolist,
-                                         statusRemoveTask
-}) => {
+                                         statusRemoveTask,
+                                         statusAddTask
+                                       }) => {
 
   const {title} = data
   const idTodolist = data.id
   const dispatch = useAppDispatch()
   const taskList = useSelector((state: AppStateType): Array<TaskType> => state.tasks[idTodolist])
 
+  const [value, setValue] = useState('')
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.currentTarget.value)
+  }
+  const handleOnEnter = (e: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
+    if (e.key === 'Enter' && value.trim().length > 2) {
+      dispatch(addTask(idTodolist, value))
+      setValue('')
+    }
+  }
+  const handleAddTask = () => {
+    if (value.trim().length > 2) {
+      dispatch(addTask(idTodolist, value))
+      setValue('')
+    }
+  }
+
   const handleClickRemoveTodolist = () => {
     dispatch(removeTodolist(idTodolist))
   }
   const callbackUpdateTodolist = (title: string) => {
     dispatch(updateTodolist(idTodolist, title))
-  }
-  const callbackAddTask = (title: string) => {
-    dispatch(addTask(idTodolist, title))
   }
   const callbackRemoveTask = (idTask: string) => {
     dispatch(removeTask(idTodolist, idTask))
@@ -52,24 +71,39 @@ const Todolist: React.FC<PropsType> = ({data,
   return (
     <div className={styles.todolistWrapper}>
       <div className={styles.todolistHeader}>
-        {statusGetTaskForTodolist === 'loading' ?
-          <h3>Loading</h3> :
-          <EditableText value={title} handleChangeText={callbackUpdateTodolist}/>
-        }
-        <button onClick={handleClickRemoveTodolist}
-                title={'remove todolist'}
-                disabled={statusRemoveTodolist === 'loading'}
+          <EditableSpan value={title} handleChangeText={callbackUpdateTodolist}/>
+        {/*<button onClick={handleClickRemoveTodolist}*/}
+        {/*        title={'remove todolist'}*/}
+        {/*        disabled={statusRemoveTodolist === 'loading'}*/}
+        {/*>*/}
+        {/*  X*/}
+        {/*</button>*/}
+        <IconButton
+          onClick={handleClickRemoveTodolist}
+          title={'remove todolist'}
+          disabled={statusRemoveTodolist === 'loading'}
         >
-          X
-        </button>
+          <Delete />
+        </IconButton>
       </div>
-      {statusGetTaskForTodolist === 'loading' && <LinearProgress/>}
-      <div>
-        <AddItem callbackAddItem={callbackAddTask}
-                 title={'Add Task'}
-                 size={'small'}
-                 disabled={statusGetTaskForTodolist === 'loading'}
+      <div className={styles.loadingLinear}>
+        {statusGetTaskForTodolist === 'loading' && <LinearProgress/>}
+      </div>
+      <div className={styles.addTask}>
+        <TextField
+          id="standard-basic"
+          label={'Add task'}
+          variant="standard"
+          size={'small'}
+          value={value}
+          onChange={handleChange}
+          onKeyPress={handleOnEnter}
         />
+        <IconButton
+          size={'small'}
+          onClick={handleAddTask}
+          disabled={statusAddTask === 'loading'}
+        ><AddCircle color={'primary'}/></IconButton>
       </div>
       <div className={styles.tasksListWrapper}>
         {taskList.length > 0 && taskList.map(item => (
