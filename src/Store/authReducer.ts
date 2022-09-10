@@ -5,6 +5,7 @@ import {api, AuthMeRequestType} from "../API/api";
 type ActionsType = ReturnType<typeof authMeAC> | ReturnType<typeof authDataLoading>
 type AuthDataLoadingType = {
   authDataLoading: boolean
+  isLogged: boolean
 }
 type InitialStateType = AuthMeRequestType & AuthDataLoadingType
 
@@ -12,7 +13,8 @@ const initialState: InitialStateType = {
   id: null,
   login: null,
   email: null,
-  authDataLoading: true
+  authDataLoading: true,
+  isLogged: false
 }
 
 export const authReducer = (state = initialState, action: ActionsType): InitialStateType => {
@@ -20,7 +22,7 @@ export const authReducer = (state = initialState, action: ActionsType): InitialS
 
     case "AUTH_ME":
       return {
-        ...state, ...action.authData
+        ...state, ...action.authData, isLogged: true
       }
     case "AUTH_DATA_LOADING":
       return {
