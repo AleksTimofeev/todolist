@@ -91,6 +91,7 @@ const Todolist: React.FC<PropsType> = ({
       </div>
       <div className={styles.addTask}>
         <TextField
+          disabled={statusGetTaskForTodolist === 'loading'}
           id="standard-basic"
           label={'Add task'}
           variant="standard"
@@ -102,7 +103,7 @@ const Todolist: React.FC<PropsType> = ({
         <IconButton
           size={'small'}
           onClick={handleAddTask}
-          disabled={statusAddTask === 'loading'}
+          disabled={statusAddTask === 'loading' || statusGetTaskForTodolist === 'loading'}
         ><AddCircle color={'primary'}/></IconButton>
       </div>
       <div className={styles.tasksListWrapper}>
