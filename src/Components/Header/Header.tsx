@@ -3,12 +3,18 @@ import styles from './Header.module.scss'
 import {AppBar, Box, Button, IconButton, LinearProgress, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {useSelector} from "react-redux";
-import {AppStateType} from "../../Store/store";
+import {AppStateType, useAppDispatch} from "../../Store/store";
 import {RequestStatusType} from "../../Store/appReducer";
+import {logoutTC} from "../../Store/authReducer";
 
 const Header = () => {
 
   const statusTodolistLoading: RequestStatusType = useSelector((state: AppStateType) => state.app.statusTodolists)
+  const dispatch = useAppDispatch()
+
+  const handleLogout = () => {
+    dispatch(logoutTC())
+  }
 
   return (
     <div>
@@ -28,6 +34,9 @@ const Header = () => {
               Todolist
             </Typography>
             <Button color="inherit">Login</Button>
+            <Button color={'inherit'}
+                    onClick={handleLogout}
+            >Logout</Button>
           </Toolbar>
         </AppBar>
       </Box>

@@ -53,6 +53,22 @@ export const api = {
     })
       .then(res => res.data)
   },
+  login(email: string, password: string, rememberMe: boolean) {
+    return axios.post<BaseRequestType<{ userId: number }>>('https://social-network.samuraijs.com/api/1.0/auth/login',
+      {email, password, rememberMe},
+      {
+      withCredentials: true,
+      headers: {"API-KEY": "8ed048a9-5b01-4cf3-8598-4c1e9e24f244"}
+    })
+      .then(res => res.data)
+  },
+  logout(){
+    return axios.delete<BaseRequestType>('https://social-network.samuraijs.com/api/1.0/auth/login', {
+      withCredentials: true,
+      headers: {"API-KEY": "8ed048a9-5b01-4cf3-8598-4c1e9e24f244"}
+    })
+      .then(res => res.data)
+  },
   getTodolists() {
     return instance.get<Array<TodolistType>>('todo-lists')
       .then(res => res.data)

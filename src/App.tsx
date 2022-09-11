@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useSelector} from "react-redux";
 import {AppStateType, useAppDispatch} from "./Store/store";
 import {authMeTC} from "./Store/authReducer";
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import Header from "./Components/Header/Header";
 import Body from "./Components/Body/Body";
 import Footer from "./Components/Footer/Footer";
@@ -12,14 +12,19 @@ import PageLoader from "./Components/Loaders/PageLoader";
 
 function App() {
 
+  const navigate = useNavigate()
   const authDataLoading = useSelector((state: AppStateType) => state.authReducer.authDataLoading)
+  const isLogged = useSelector((state: AppStateType) => state.authReducer.isLogged)
 
   const dispatch = useAppDispatch()
 
 
   useEffect(() => {
-      dispatch(authMeTC())
-  }, [])
+    dispatch(authMeTC())
+    if (!isLogged) {
+      navigate('/login')
+    }
+  }, [isLogged])
 
 
   return (

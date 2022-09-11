@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import styles from './Logon.module.scss'
 import {useSelector} from "react-redux";
-import {AppStateType} from "../../Store/store";
+import {AppStateType, useAppDispatch} from "../../Store/store";
 import {useNavigate} from "react-router-dom";
 import {Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
+import {loginTC} from "../../Store/authReducer";
 
 type ValuesFormType = {login: string, password: string, rememberMe: Boolean}
 
@@ -21,6 +22,7 @@ return errors
 
 const Login = () => {
 
+  const dispatch = useAppDispatch()
   const isLogged = useSelector((state: AppStateType) => state.authReducer.isLogged)
   const navigate = useNavigate()
 
@@ -32,9 +34,10 @@ const Login = () => {
     },
     onSubmit: (values) => {
       console.log(values)
+      dispatch(loginTC(values.login, values.password, values.rememberMe))
       formik.resetForm()
     },
-    validate
+
   })
 
 
@@ -42,7 +45,7 @@ const Login = () => {
     if (isLogged) {
       navigate('/')
     }
-  }, [])
+  }, [isLogged])
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -66,6 +69,7 @@ const Login = () => {
             error={!!formik.errors.password && formik.touched.password}
             label={'password'}
             variant="filled"
+            type={'password'}
             {...formik.getFieldProps('password')}
           />
         </Grid>
