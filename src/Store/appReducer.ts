@@ -1,8 +1,8 @@
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 const initialState = {
-  statusTodolists: 'loading' as RequestStatusType,
-  statusTasks: 'loading' as RequestStatusType,
+  statusTodolists: 'idle' as RequestStatusType,
+  statusTasks: 'idle' as RequestStatusType,
 }
 
 type ActionsType = ReturnType<typeof setStatusTodolistsAC>

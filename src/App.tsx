@@ -32,9 +32,11 @@ function App() {
       {authDataLoading ?
         <PageLoader/> :
         <>
+          <Header/>
           <Routes>
+
             <Route path={'/'} element={<>
-              <Header/>
+
               <Body/>
               <Footer/>
             </>}/>

@@ -1,5 +1,6 @@
 import {Dispatch} from "redux";
 import {api, AuthMeRequestType} from "../API/api";
+import {setStatusTodolistsAC} from "./appReducer";
 
 
 type ActionsType = ReturnType<typeof authMeAC> |
@@ -61,10 +62,12 @@ export const logoutTC = () => (dispatch: Dispatch) => {
   })
 }
 export const loginTC = (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch) => {
+  dispatch(setStatusTodolistsAC('loading'))
   api.login(email, password, rememberMe)
     .then(res => {
       if (res.resultCode === 0) {
         dispatch(loginAC(res.data.userId))
+        dispatch(setStatusTodolistsAC('succeeded'))
       }
     })
 }

@@ -13,6 +13,7 @@ const Header = () => {
 
   const statusTodolistLoading = useSelector((state: AppStateType): RequestStatusType => state.app.statusTodolists)
   const login = useSelector((state: AppStateType) => state.authReducer.login)
+  const isLogged = useSelector((state: AppStateType): boolean => state.authReducer.isLogged)
   const dispatch = useAppDispatch()
 
 
@@ -48,7 +49,8 @@ const Header = () => {
               Todolist
             </Typography>
 
-            <Button
+            {!!login && <>
+              <Button
               id="basic-button"
               aria-controls={open ? 'basic-menu' : undefined}
               aria-haspopup="true"
@@ -58,21 +60,22 @@ const Header = () => {
             >
               {login}
             </Button>
-            <Menu
+              <Menu
               id="basic-menu"
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
               MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
+              'aria-labelledby': 'basic-button',
+            }}
+              >
               <MenuItem onClick={handleClose}>
-                <Button color={'inherit'}
-                        onClick={handleLogout}
-                >Logout</Button>
+              <Button color={'inherit'}
+              onClick={handleLogout}
+              >Logout</Button>
               </MenuItem>
-            </Menu>
+              </Menu>
+            </>}
 
             {/*<Typography variant="h6" component="div" sx={{flexGrow: 0.2}}>*/}
             {/*  {login}*/}
