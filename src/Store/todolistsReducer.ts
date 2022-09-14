@@ -1,6 +1,6 @@
 import {api, TodolistType} from "../API/api";
-import {Dispatch} from "redux";
 import {RequestStatusType, setStatusTodolistsAC} from "./appReducer";
+import {AppThunkType} from "./store";
 
 export type TodolistsActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof addTodolistsAC> |
@@ -57,50 +57,62 @@ export const updateTodolistAC = (idTodolist: string, title: string) => ({idTodol
 export const removeTodolistAC = (idTodolist: string) => ({idTodolist, type: 'REMOVE_TODOLIST'} as const)
 
 
-export const getTodolists = () => (dispatch: Dispatch) => {
+export const getTodolists = ():AppThunkType => async dispatch => {
   dispatch(setStatusTodolistsAC('loading'))
-  api.getTodolists()
-    .then(data => {
-      dispatch(getTodolistsAC(data))
-      dispatch(setStatusTodolistsAC('succeeded'))
-    })
-    .catch(error => {
-      // dispatch()
-    })
+  try {
+    const res = await api.getTodolists()
+    dispatch(getTodolistsAC(res))
+  }catch (e){
+    alert(e)
+  }finally {
+    dispatch(setStatusTodolistsAC('succeeded'))
+  }
 }
 
-export const addTodolist = (title: string) => (dispatch: Dispatch) => {
+export const addTodolist = (title: string):AppThunkType => async dispatch => {
   dispatch(setStatusTodolistsAC('loading'))
-  api.addTodolist(title)
-    .then(data => {
-      if(data.resultCode === 0){
-        dispatch(addTodolistsAC(data.data.item))
-        dispatch(setStatusTodolistsAC('succeeded'))
-      }
-    })
+  try {
+    const res = await api.addTodolist(title)
+    if(res.resultCode === 0){
+      dispatch(addTodolistsAC(res.data.item))
+    }else{
+      alert(res.messages[0])
+    }
+  }catch (e) {
+    alert(e)
+  }finally {
+    dispatch(setStatusTodolistsAC('succeeded'))
+  }
 }
 
-export const updateTodolist = (idTodolist: string, title: string) => (dispatch: Dispatch) => {
+export const updateTodolist = (idTodolist: string, title: string):AppThunkType => async dispatch => {
   dispatch(setStatusTodolistsAC('loading'))
-  api.updateTodolist(idTodolist, title)
-    .then(data => {
-      if(data.resultCode === 0){
-        dispatch(updateTodolistAC(idTodolist, title))
-        dispatch(setStatusTodolistsAC('succeeded'))
-
-      }
-    })
+  try {
+    const res = await api.updateTodolist(idTodolist, title)
+    if(res.resultCode === 0){
+      dispatch(updateTodolistAC(idTodolist, title))
+    }else{
+      alert(res.messages[0])
+    }
+  }catch (e){
+    alert(e)
+  }finally {
+    dispatch(setStatusTodolistsAC('succeeded'))
+  }
 }
 
-export const removeTodolist = (idTodolist: string) => (dispatch: Dispatch) => {
+export const removeTodolist = (idTodolist: string):AppThunkType => async dispatch => {
   dispatch(setStatusTodolistsAC('loading'))
   dispatch(changeStatusRemoveTodolistAC(idTodolist, 'loading'))
-  api.removeTodolist(idTodolist)
-    .then(data => {
-      if(data.resultCode === 0){
-        dispatch(removeTodolistAC(idTodolist))
-        dispatch(setStatusTodolistsAC('succeeded'))
-        dispatch(changeStatusRemoveTodolistAC(idTodolist, 'succeeded'))
-      }
-    })
+  try {
+    const res = await api.removeTodolist(idTodolist)
+    if(res.resultCode === 0) {
+      dispatch(removeTodolistAC(idTodolist))
+    }
+  }catch (e) {
+    alert(e)
+  }finally {
+    dispatch(setStatusTodolistsAC('succeeded'))
+    dispatch(changeStatusRemoveTodolistAC(idTodolist, 'succeeded'))
+  }
 }
