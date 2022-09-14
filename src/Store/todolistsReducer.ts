@@ -2,7 +2,7 @@ import {api, TodolistType} from "../API/api";
 import {Dispatch} from "redux";
 import {RequestStatusType, setStatusTodolistsAC} from "./appReducer";
 
-type ActionsType = ReturnType<typeof getTodolistsAC> |
+export type TodolistsActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof addTodolistsAC> |
   ReturnType<typeof removeTodolistAC> |
   ReturnType<typeof updateTodolistAC> |
@@ -20,7 +20,7 @@ export type FullTodolistType = Array<TodolistType & {
 
 const initialState: FullTodolistType = []
 
-export const todolistsReducer = (state = initialState, action: ActionsType) => {
+export const todolistsReducer = (state = initialState, action: TodolistsActionsType) => {
   switch (action.type) {
     case 'GET_TODOLISTS': return [...action.todolists]
     case "ADD_TODOLIST": return [action.todolist, ...state]

@@ -11,10 +11,10 @@ type ValuesFormType = {login: string, password: string, rememberMe: Boolean}
 
 const validate = (values: ValuesFormType) => {
   const errors: ValuesFormType = {login: '', password: '', rememberMe: false}
-if (!values.login) {
+if (!values.login.length) {
   errors.login = 'required'
 }
-  if (!values.password) {
+  if (!values.password.length) {
     errors.login = 'required'
   }
 return errors
@@ -33,9 +33,7 @@ const Login = () => {
       rememberMe: false
     },
     onSubmit: (values) => {
-      console.log(values)
       dispatch(loginTC(values.login, values.password, values.rememberMe))
-      formik.resetForm()
     },
 
   })
@@ -43,6 +41,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isLogged) {
+      formik.resetForm()
       navigate('/')
     }
   }, [isLogged])

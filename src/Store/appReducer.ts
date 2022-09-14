@@ -5,9 +5,9 @@ const initialState = {
   statusTasks: 'idle' as RequestStatusType,
 }
 
-type ActionsType = ReturnType<typeof setStatusTodolistsAC>
+export type AppActionsType = ReturnType<typeof setStatusTodolistsAC>
 
-export const appReducer = (state = initialState, action: ActionsType) => {
+export const appReducer = (state = initialState, action: AppActionsType) => {
 
   switch (action.type) {
     case "SET_STATUS_TODOLISTS": return {...state,

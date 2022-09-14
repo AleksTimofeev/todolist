@@ -10,7 +10,7 @@ import {Dispatch} from "redux";
 import {RequestStatusType} from "./appReducer";
 
 
-type ActionsType = ReturnType<typeof getTodolistsAC> |
+export type TaskActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof getTasksForTodolistAC> |
   ReturnType<typeof addTodolistsAC> |
   ReturnType<typeof removeTodolistAC> |
@@ -25,7 +25,7 @@ type InitialType = {
 
 const initialState: InitialType = {}
 
-export const taskReducer = (state = initialState, action: ActionsType): InitialType => {
+export const taskReducer = (state = initialState, action: TaskActionsType): InitialType => {
   switch (action.type) {
     case 'GET_TODOLISTS':
       const todolists: { [key: string]: [] } = {}
