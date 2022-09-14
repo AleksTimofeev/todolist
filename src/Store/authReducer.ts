@@ -1,11 +1,10 @@
-import {Dispatch} from "redux";
 import {api, AuthMeRequestType} from "../API/api";
 import {setStatusTodolistsAC} from "./appReducer";
+import {AppThunkType} from "./store";
 
 
-type ActionsType = ReturnType<typeof authMeAC> |
+export type AuthActionsType = ReturnType<typeof authMeAC> |
   ReturnType<typeof authDataLoading> |
-  ReturnType<typeof loginAC> |
   ReturnType<typeof logoutAC>
 
 type AuthDataLoadingType = {
@@ -22,7 +21,7 @@ const initialState: InitialStateType = {
   isLogged: false
 }
 
-export const authReducer = (state = initialState, action: ActionsType): InitialStateType => {
+export const authReducer = (state = initialState, action: AuthActionsType): InitialStateType => {
   switch (action.type) {
 
     case "AUTH_ME":
@@ -32,10 +31,6 @@ export const authReducer = (state = initialState, action: ActionsType): InitialS
     case "AUTH_DATA_LOADING":
       return {
         ...state, authDataLoading: action.value
-      }
-    case "LOGIN":
-      return {
-        ...state, id: action.id, isLogged: true
       }
     case "LOGOUT":
       return {...state,
@@ -51,27 +46,26 @@ export const authReducer = (state = initialState, action: ActionsType): InitialS
 
 const authMeAC = (authData: AuthMeRequestType) => ({authData, type: 'AUTH_ME'} as const)
 const authDataLoading = (value: boolean) => ({value, type: 'AUTH_DATA_LOADING'} as const)
-const loginAC = (id: number) => ({type: 'LOGIN', id} as const)
 const logoutAC = () => ({type: 'LOGOUT'} as const)
 
-export const logoutTC = () => (dispatch: Dispatch) => {
+export const logoutTC = (): AppThunkType => (dispatch) => {
   api.logout().then(res => {
     if (res.resultCode === 0) {
       dispatch(logoutAC())
     }
   })
 }
-export const loginTC = (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch) => {
+export const loginTC = (email: string, password: string, rememberMe: boolean): AppThunkType => (dispatch) => {
   dispatch(setStatusTodolistsAC('loading'))
   api.login(email, password, rememberMe)
     .then(res => {
       if (res.resultCode === 0) {
-        dispatch(loginAC(res.data.userId))
+        dispatch(authMeTC())
         dispatch(setStatusTodolistsAC('succeeded'))
       }
     })
 }
-export const authMeTC = () => (dispatch: Dispatch) => {
+export const authMeTC = (): AppThunkType => (dispatch) => {
   api.authMe()
     .then(data => {
       if (data.resultCode === 0) {
