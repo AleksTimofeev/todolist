@@ -6,9 +6,7 @@ import {
   removeTodolistAC
 } from "./todolistsReducer";
 import {api, TaskType} from "../API/api";
-import {Dispatch} from "redux";
-import {RequestStatusType} from "./appReducer";
-
+import {AppThunkType} from "./store";
 
 export type TaskActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof getTasksForTodolistAC> |
@@ -49,12 +47,16 @@ export const taskReducer = (state = initialState, action: TaskActionsType): Init
         ...state,
         [action.task.todoListId]: [...state[action.task.todoListId].map(item => item.id === action.task.id ? {...action.task} : item)]
       }
-    case "ADD_TASK": return {...state,
-      [action.task.todoListId]: [...state[action.task.todoListId], {...action.task}]
-    }
-    case 'REMOVE_TASK': return {...state,
-      [action.idTodolist]: [...state[action.idTodolist].filter(item => item.id !== action.idTask)]
-    }
+    case "ADD_TASK":
+      return {
+        ...state,
+        [action.task.todoListId]: [...state[action.task.todoListId], {...action.task}]
+      }
+    case 'REMOVE_TASK':
+      return {
+        ...state,
+        [action.idTodolist]: [...state[action.idTodolist].filter(item => item.id !== action.idTask)]
+      }
 
     default:
       return state
@@ -70,42 +72,56 @@ export const updateTaskAC = (task: TaskType) => ({task, type: 'UPDATE_TASK'} as 
 export const addTaskAC = (task: TaskType) => ({task, type: 'ADD_TASK'} as const)
 export const removeTaskAC = (idTodolist: string, idTask: string) => ({idTodolist, idTask, type: 'REMOVE_TASK'} as const)
 
-export const getTasksForTodolist = (idTodolist: string) => (dispatch: Dispatch) => {
+export const getTasksForTodolist = (idTodolist: string): AppThunkType => async dispatch => {
   dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
-  api.getTasksForTodolist(idTodolist)
-    .then(data => {
-      dispatch(getTasksForTodolistAC(data.items, idTodolist))
-      dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
-    })
+  try {
+    const res = await api.getTasksForTodolist(idTodolist)
+    dispatch(getTasksForTodolistAC(res.items, idTodolist))
+  } catch (e) {
+    alert(e)
+  } finally {
+    dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
+  }
 }
-export const updateTask = (task: TaskType) => (dispatch: Dispatch) => {
-  api.updateTask(task)
-    .then(data => {
-      if (data.resultCode === 0) {
-        dispatch(updateTaskAC(data.data.item))
-      }
-    })
+export const updateTask = (task: TaskType): AppThunkType => async dispatch => {
+  try {
+    const res = await api.updateTask(task)
+    if (res.resultCode === 0) {
+      dispatch(updateTaskAC(res.data.item))
+    } else {
+      alert(res.messages[0])
+    }
+  } catch (e) {
+    alert(e)
+  }
 }
-export const addTask = (idTodolist: string, titleTask: string) => (dispatch:Dispatch) => {
+export const addTask = (idTodolist: string, titleTask: string): AppThunkType => async dispatch => {
   dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
-  api.addTask(idTodolist, titleTask)
-    .then(data => {
-      if(data.resultCode === 0){
-        dispatch(addTaskAC(data.data.item))
-        dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
-      }
-    })
+  try {
+    const res = await api.addTask(idTodolist, titleTask)
+    res.resultCode === 0 ?
+      dispatch(addTaskAC(res.data.item)) :
+      alert(res.messages[0])
+  } catch (e) {
+    alert(e)
+  } finally {
+    dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
+  }
 }
-export const removeTask = (idTodolist: string, idTask: string) => (dispatch: Dispatch) => {
+export const removeTask = (idTodolist: string, idTask: string): AppThunkType => async dispatch => {
   dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
   dispatch(changeStatusRemoveTaskAC(idTodolist, 'loading'))
-  api.removeTask(idTodolist, idTask)
-    .then(data => {
-      if(data.resultCode === 0){
-        dispatch(removeTaskAC(idTodolist, idTask))
-        dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
-        dispatch(changeStatusRemoveTaskAC(idTodolist, 'succeeded'))
-      }
-    })
-    .catch(error => console.log(error))
+  try {
+    const res = await api.removeTask(idTodolist, idTask)
+    if (res.resultCode === 0) {
+      dispatch(removeTaskAC(idTodolist, idTask))
+    }else{
+      alert(res.messages[0])
+    }
+  }catch (e){
+    alert(e)
+  }finally {
+    dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
+    dispatch(changeStatusRemoveTaskAC(idTodolist, 'succeeded'))
+  }
 }
