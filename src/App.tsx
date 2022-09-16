@@ -5,7 +5,6 @@ import {authMeTC} from "./Store/authReducer";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import Header from "./Components/Header/Header";
 import Body from "./Components/Body/Body";
-import Footer from "./Components/Footer/Footer";
 import Login from "./Components/Login/Login";
 import PageLoader from "./Components/Loaders/PageLoader";
 
@@ -36,9 +35,7 @@ function App() {
           <Routes>
 
             <Route path={'/'} element={<>
-
               <Body/>
-              <Footer/>
             </>}/>
             <Route path={'login'} element={<Login/>}/>
           </Routes>

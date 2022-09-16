@@ -14,19 +14,19 @@ beforeEach(() => {
   initialState = [
     {id: '001', title: 'title 001', addedDate: '01.01.01',
       order: 1, statusGetTaskForTodolist: "idle", statusRemoveTodolist: "idle", statusRemoveTask: 'idle',
-      statusAddTask: "idle"
+      statusAddTask: "idle", statusUpdateTodolist: 'idle'
     },
     {id: '002', title: 'title 002', addedDate: '01.01.01',
       order: 1, statusGetTaskForTodolist: "idle", statusRemoveTodolist: "idle", statusRemoveTask: 'idle',
-      statusAddTask: "idle"
+      statusAddTask: "idle", statusUpdateTodolist: 'idle'
     },
     {id: '003', title: 'title 003', addedDate: '01.01.01',
       order: 1, statusGetTaskForTodolist: "idle", statusRemoveTodolist: "idle", statusRemoveTask: 'idle',
-      statusAddTask: "idle"
+      statusAddTask: "idle", statusUpdateTodolist: 'idle'
     },
     {id: '004', title: 'title 004', addedDate: '01.01.01',
       order: 1, statusGetTaskForTodolist: "idle", statusRemoveTodolist: "idle", statusRemoveTask: 'idle',
-      statusAddTask: "idle"
+      statusAddTask: "idle", statusUpdateTodolist: 'idle'
     },
   ]
 })

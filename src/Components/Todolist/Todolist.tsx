@@ -18,6 +18,7 @@ type PropsType = {
   statusRemoveTodolist: RequestStatusType
   statusRemoveTask: RequestStatusType
   statusAddTask: RequestStatusType
+  statusUpdateTodolist: RequestStatusType
 }
 
 const Todolist: React.FC<PropsType> = ({
@@ -25,7 +26,8 @@ const Todolist: React.FC<PropsType> = ({
                                          statusGetTaskForTodolist,
                                          statusRemoveTodolist,
                                          statusRemoveTask,
-                                         statusAddTask
+                                         statusAddTask,
+                                         statusUpdateTodolist
                                        }) => {
 
   const {title} = data
@@ -87,7 +89,8 @@ const Todolist: React.FC<PropsType> = ({
         </IconButton>
       </div>
       <div className={styles.loadingLinear}>
-        {statusGetTaskForTodolist === 'loading' && <LinearProgress/>}
+        {statusGetTaskForTodolist === 'loading' || statusUpdateTodolist === 'loading' ?
+          <LinearProgress/> : <></>}
       </div>
       <div className={styles.addTask}>
         <TextField

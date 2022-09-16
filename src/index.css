@@ -2,6 +2,9 @@ html {
   box-sizing: border-box;
   font-family: "franklin gothic medium", sans-serif;
 }
+body {
+  background: #e1e1e1;
+}
 body, h1, h2, h3, h4, h5, h6, p, ol, ul {
   margin: 0;
   padding: 0;

@@ -9,13 +9,15 @@ export type TodolistsActionsType = ReturnType<typeof getTodolistsAC> |
   ReturnType<typeof changeStatusGetTaskForTodolist> |
   ReturnType<typeof changeStatusRemoveTodolistAC> |
   ReturnType<typeof changeStatusAddTaskAC> |
-  ReturnType<typeof changeStatusRemoveTaskAC>
+  ReturnType<typeof changeStatusRemoveTaskAC> |
+  ReturnType<typeof changeStatusUpdateTodolistAC>
 
 export type FullTodolistType = Array<TodolistType & {
   statusRemoveTodolist: RequestStatusType
   statusGetTaskForTodolist: RequestStatusType
   statusRemoveTask: RequestStatusType
   statusAddTask: RequestStatusType
+  statusUpdateTodolist: RequestStatusType
 }>
 
 const initialState: FullTodolistType = []
@@ -28,6 +30,9 @@ export const todolistsReducer = (state = initialState, action: TodolistsActionsT
     case "REMOVE_TODOLIST": return [...state.filter(item => item.id !== action.idTodolist)]
     case "CHANGE_STATUS_GET_TASK_FOR_TODOLIST": return [
       ...state.map(item => item.id === action.idTodolist ? {...item, statusGetTaskForTodolist: action.status} : item)
+    ]
+    case "CHANGE_STATUS_UPDATE_TODOLIST": return [
+      ...state.map(item => item.id === action.idTodolist ? {...item, statusUpdateTodolist: action.status} : item)
     ]
     case "CHANGE_STATUS_REMOVE_TODOLIST": return [
       ...state.map(item => item.id === action.idTodolist ? {...item, statusRemoveTodolist: action.status} : item)
@@ -43,6 +48,9 @@ export const todolistsReducer = (state = initialState, action: TodolistsActionsT
   }
 }
 
+export const changeStatusUpdateTodolistAC = (status: RequestStatusType, idTodolist: string) => (
+  {type: 'CHANGE_STATUS_UPDATE_TODOLIST', status, idTodolist} as const
+)
 export const changeStatusRemoveTodolistAC = (idTodolist: string, status: RequestStatusType) => (
   {type: 'CHANGE_STATUS_REMOVE_TODOLIST', idTodolist, status} as const)
 export const changeStatusGetTaskForTodolist = (idTodolist: string, status: RequestStatusType) => (
@@ -86,7 +94,7 @@ export const addTodolist = (title: string):AppThunkType => async dispatch => {
 }
 
 export const updateTodolist = (idTodolist: string, title: string):AppThunkType => async dispatch => {
-  dispatch(setStatusTodolistsAC('loading'))
+  dispatch(changeStatusUpdateTodolistAC('loading', idTodolist))
   try {
     const res = await api.updateTodolist(idTodolist, title)
     if(res.resultCode === 0){
@@ -97,7 +105,7 @@ export const updateTodolist = (idTodolist: string, title: string):AppThunkType =
   }catch (e){
     alert(e)
   }finally {
-    dispatch(setStatusTodolistsAC('succeeded'))
+    dispatch(changeStatusUpdateTodolistAC('succeeded', idTodolist))
   }
 }
 

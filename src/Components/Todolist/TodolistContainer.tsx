@@ -61,6 +61,7 @@ const TodolistContainer = () => {
                   statusRemoveTodolist={item.statusRemoveTodolist}
                   statusRemoveTask={item.statusRemoveTask}
                   statusAddTask={item.statusAddTask}
+                  statusUpdateTodolist={item.statusUpdateTodolist}
         />
       ))}
     </div>
