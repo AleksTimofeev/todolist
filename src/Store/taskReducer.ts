@@ -1,7 +1,6 @@
 import {
   addTodolistsAC,
-  changeStatusGetTaskForTodolist,
-  changeStatusRemoveTaskAC,
+  changeStatusRemoveTaskAC, changeStatusUpdateTodolistAC,
   getTodolistsAC,
   removeTodolistAC
 } from "./todolistsReducer";
@@ -73,14 +72,14 @@ export const addTaskAC = (task: TaskType) => ({task, type: 'ADD_TASK'} as const)
 export const removeTaskAC = (idTodolist: string, idTask: string) => ({idTodolist, idTask, type: 'REMOVE_TASK'} as const)
 
 export const getTasksForTodolist = (idTodolist: string): AppThunkType => async dispatch => {
-  dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
+  dispatch(changeStatusUpdateTodolistAC('loading', idTodolist))
   try {
     const res = await api.getTasksForTodolist(idTodolist)
     dispatch(getTasksForTodolistAC(res.items, idTodolist))
   } catch (e) {
     alert(e)
   } finally {
-    dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
+    dispatch(changeStatusUpdateTodolistAC('succeeded', idTodolist))
   }
 }
 export const updateTask = (task: TaskType): AppThunkType => async dispatch => {
@@ -96,7 +95,7 @@ export const updateTask = (task: TaskType): AppThunkType => async dispatch => {
   }
 }
 export const addTask = (idTodolist: string, titleTask: string): AppThunkType => async dispatch => {
-  dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
+  dispatch(changeStatusUpdateTodolistAC('loading', idTodolist))
   try {
     const res = await api.addTask(idTodolist, titleTask)
     res.resultCode === 0 ?
@@ -105,11 +104,11 @@ export const addTask = (idTodolist: string, titleTask: string): AppThunkType => 
   } catch (e) {
     alert(e)
   } finally {
-    dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
+    dispatch(changeStatusUpdateTodolistAC('succeeded', idTodolist))
   }
 }
 export const removeTask = (idTodolist: string, idTask: string): AppThunkType => async dispatch => {
-  dispatch(changeStatusGetTaskForTodolist(idTodolist, 'loading'))
+  dispatch(changeStatusUpdateTodolistAC('loading', idTodolist))
   dispatch(changeStatusRemoveTaskAC(idTodolist, 'loading'))
   try {
     const res = await api.removeTask(idTodolist, idTask)
@@ -121,7 +120,7 @@ export const removeTask = (idTodolist: string, idTask: string): AppThunkType => 
   }catch (e){
     alert(e)
   }finally {
-    dispatch(changeStatusGetTaskForTodolist(idTodolist, 'succeeded'))
+    dispatch(changeStatusUpdateTodolistAC('succeeded', idTodolist))
     dispatch(changeStatusRemoveTaskAC(idTodolist, 'succeeded'))
   }
 }

@@ -89,8 +89,7 @@ const Todolist: React.FC<PropsType> = ({
         </IconButton>
       </div>
       <div className={styles.loadingLinear}>
-        {statusGetTaskForTodolist === 'loading' || statusUpdateTodolist === 'loading' ?
-          <LinearProgress/> : <></>}
+        {statusUpdateTodolist === 'loading' && <LinearProgress/>}
       </div>
       <div className={styles.addTask}>
         <TextField
