@@ -7,14 +7,14 @@ import {Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
 import {loginTC} from "../../Store/authReducer";
 
-type ValuesFormType = {login: string, password: string, rememberMe: Boolean}
+type ValuesFormType = {login?: string, password?: string}
 
 const validate = (values: ValuesFormType) => {
-  const errors: ValuesFormType = {login: '', password: '', rememberMe: false}
-if (!values.login.length) {
+  const errors: ValuesFormType = {}
+if (!values.login) {
   errors.login = 'required'
 }
-  if (!values.password.length) {
+  if (!values.password) {
     errors.login = 'required'
   }
 return errors
@@ -32,6 +32,7 @@ const Login = () => {
       password: '',
       rememberMe: false
     },
+    validate,
     onSubmit: (values) => {
       dispatch(loginTC(values.login, values.password, values.rememberMe))
     },
