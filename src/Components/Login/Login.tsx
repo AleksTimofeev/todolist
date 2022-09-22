@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import styles from './Logon.module.scss'
-import {useSelector} from "react-redux";
-import {AppStateType, useAppDispatch} from "../../Store/store";
+import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {useNavigate} from "react-router-dom";
 import {Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
@@ -23,7 +22,7 @@ return errors
 const Login = () => {
 
   const dispatch = useAppDispatch()
-  const isLogged = useSelector((state: AppStateType) => state.authReducer.isLogged)
+  const isLogged = useAppSelector(state => state.authReducer.isLogged)
   const navigate = useNavigate()
 
   const formik = useFormik({

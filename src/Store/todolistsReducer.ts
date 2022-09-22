@@ -1,16 +1,7 @@
 import {api, TodolistType} from "../API/api";
 import {RequestStatusType, setStatusTodolistsAC} from "./appReducer";
 import {AppThunkType} from "./store";
-
-export type TodolistsActionsType = ReturnType<typeof getTodolistsAC> |
-  ReturnType<typeof addTodolistsAC> |
-  ReturnType<typeof removeTodolistAC> |
-  ReturnType<typeof updateTodolistAC> |
-  ReturnType<typeof changeStatusGetTaskForTodolist> |
-  ReturnType<typeof changeStatusRemoveTodolistAC> |
-  ReturnType<typeof changeStatusAddTaskAC> |
-  ReturnType<typeof changeStatusRemoveTaskAC> |
-  ReturnType<typeof changeStatusUpdateTodolistAC>
+import {createSlice, Dispatch, PayloadAction} from "@reduxjs/toolkit";
 
 export type FullTodolistType = Array<TodolistType & {
   statusRemoveTodolist: RequestStatusType
@@ -22,105 +13,127 @@ export type FullTodolistType = Array<TodolistType & {
 
 const initialState: FullTodolistType = []
 
-export const todolistsReducer = (state = initialState, action: TodolistsActionsType) => {
-  switch (action.type) {
-    case 'GET_TODOLISTS': return [...action.todolists]
-    case "ADD_TODOLIST": return [action.todolist, ...state]
-    case "UPDATE_TODOLIST": return [...state.map(item => item.id === action.idTodolist ? {...item, title: action.title} : item)]
-    case "REMOVE_TODOLIST": return [...state.filter(item => item.id !== action.idTodolist)]
-    case "CHANGE_STATUS_GET_TASK_FOR_TODOLIST": return [
-      ...state.map(item => item.id === action.idTodolist ? {...item, statusGetTaskForTodolist: action.status} : item)
-    ]
-    case "CHANGE_STATUS_UPDATE_TODOLIST": return [
-      ...state.map(item => item.id === action.idTodolist ? {...item, statusUpdateTodolist: action.status} : item)
-    ]
-    case "CHANGE_STATUS_REMOVE_TODOLIST": return [
-      ...state.map(item => item.id === action.idTodolist ? {...item, statusRemoveTodolist: action.status} : item)
-    ]
-    case "CHANGE_STATUS_REMOVE_TASK": return [
-      ...state.map(item => item.id === action.idTodolist ? {...item, statusRemoveTask: action.status} : item)
-    ]
-    case "CHANGE_STATUS_ADD_TASK": return [
-      ...state.map(item => item.id === action.idTodolist ? {...item, statusAddTask: action.status} : item)
-    ]
+const todolistsSlice = createSlice({
+  name: 'todolists',
+  initialState: initialState,
+  reducers: {
+    getTodolistsAC: (state, action: PayloadAction<{ todolists: Array<TodolistType> }>) => {
+      return action.payload.todolists.map(item => ({
+        ...item,
+        statusRemoveTodolist: 'idle',
+        statusGetTaskForTodolist: 'idle',
+        statusRemoveTask: 'idle',
+        statusAddTask: 'idle',
+        statusUpdateTodolist: 'idle',
+      }))
+    },
+    addTodolistsAC: (state, action: PayloadAction<{ todolist: TodolistType }>) => {
+      return [{
+        ...action.payload.todolist,
+        statusRemoveTodolist: 'idle',
+        statusGetTaskForTodolist: 'idle',
+        statusRemoveTask: 'idle',
+        statusAddTask: 'idle',
+        statusUpdateTodolist: 'idle',
+      }, ...state]
+    },
+    updateTodolistAC: (state, action: PayloadAction<{ idTodolist: string, title: string }>) => {
+      return state.map(
+        item => item.id === action.payload.idTodolist ? {...item, title: action.payload.title} : item
+      )
+    },
+    removeTodolistAC: (state, action: PayloadAction<{ idTodolist: string }>) => {
+      return state.filter(item => item.id !== action.payload.idTodolist)
+    },
+    changeStatusUpdateTodolistAC:
+      (state, action: PayloadAction<{ status: RequestStatusType, idTodolist: string }>) => {
+      return state.map(
+        item => item.id === action.payload.idTodolist ? {...item, statusUpdateTodolist: action.payload.status} : item
+      )
+    },
+    changeStatusRemoveTodolistAC:
+      (state, action: PayloadAction<{ status: RequestStatusType, idTodolist: string }>) => {
+      return state.map(
+        item => item.id === action.payload.idTodolist ? {...item, statusRemoveTodolist: action.payload.status} : item
+      )
+    },
+    changeStatusRemoveTaskAC:
+      (state, action: PayloadAction<{ status: RequestStatusType, idTodolist: string }>) => {
+      return state.map(
+        item => item.id === action.payload.idTodolist ? {...item, statusRemoveTask: action.payload.status} : item
+      )
+    },
+  },
+})
 
-    default: return state
-  }
-}
+export const todolistsReducer = todolistsSlice.reducer
 
-export const changeStatusUpdateTodolistAC = (status: RequestStatusType, idTodolist: string) => (
-  {type: 'CHANGE_STATUS_UPDATE_TODOLIST', status, idTodolist} as const
-)
-export const changeStatusRemoveTodolistAC = (idTodolist: string, status: RequestStatusType) => (
-  {type: 'CHANGE_STATUS_REMOVE_TODOLIST', idTodolist, status} as const)
-export const changeStatusGetTaskForTodolist = (idTodolist: string, status: RequestStatusType) => (
-  {type: 'CHANGE_STATUS_GET_TASK_FOR_TODOLIST', idTodolist, status} as const)
-export const changeStatusRemoveTaskAC = (idTodolist: string, status: RequestStatusType) => (
-  {type: 'CHANGE_STATUS_REMOVE_TASK', idTodolist, status} as const)
-export const changeStatusAddTaskAC = (idTodolist: string, status: RequestStatusType) => (
-  {type: 'CHANGE_STATUS_ADD_TASK', idTodolist, status} as const)
-export const getTodolistsAC = (todolists: Array<TodolistType>) => ({todolists, type: 'GET_TODOLISTS'} as const)
-export const addTodolistsAC = (todolist: TodolistType) => ({todolist, type: 'ADD_TODOLIST'} as const)
-export const updateTodolistAC = (idTodolist: string, title: string) => ({idTodolist, title, type: 'UPDATE_TODOLIST'} as const)
-export const removeTodolistAC = (idTodolist: string) => ({idTodolist, type: 'REMOVE_TODOLIST'} as const)
+export const {
+  getTodolistsAC,
+  addTodolistsAC,
+  updateTodolistAC,
+  removeTodolistAC,
+  changeStatusUpdateTodolistAC,
+  changeStatusRemoveTodolistAC,
+  changeStatusRemoveTaskAC
+} = todolistsSlice.actions
 
-
-export const getTodolists = ():AppThunkType => async dispatch => {
-  dispatch(setStatusTodolistsAC('loading'))
+export const getTodolists = () => async (dispatch: Dispatch) => {
+  dispatch(setStatusTodolistsAC({status: 'loading'}))
   try {
     const res = await api.getTodolists()
-    dispatch(getTodolistsAC(res))
-  }catch (e){
+    dispatch(getTodolistsAC({todolists: res}))
+  } catch (e) {
     alert(e)
-  }finally {
-    dispatch(setStatusTodolistsAC('succeeded'))
+  } finally {
+    dispatch(setStatusTodolistsAC({status: 'succeeded'}))
   }
 }
 
-export const addTodolist = (title: string):AppThunkType => async dispatch => {
-  dispatch(setStatusTodolistsAC('loading'))
+export const addTodolist = (title: string): AppThunkType => async (dispatch) => {
+  dispatch(setStatusTodolistsAC({status: 'loading'}))
   try {
     const res = await api.addTodolist(title)
-    if(res.resultCode === 0){
-      dispatch(addTodolistsAC(res.data.item))
-    }else{
+    if (res.resultCode === 0) {
+      dispatch(addTodolistsAC({todolist: res.data.item}))
+    } else {
       alert(res.messages[0])
     }
-  }catch (e) {
+  } catch (e) {
     alert(e)
-  }finally {
-    dispatch(setStatusTodolistsAC('succeeded'))
+  } finally {
+    dispatch(setStatusTodolistsAC({status: 'succeeded'}))
   }
 }
 
-export const updateTodolist = (idTodolist: string, title: string):AppThunkType => async dispatch => {
-  dispatch(changeStatusUpdateTodolistAC('loading', idTodolist))
+export const updateTodolist = (idTodolist: string, title: string) => async (dispatch: Dispatch) => {
+  dispatch(changeStatusUpdateTodolistAC({status: 'loading', idTodolist}))
   try {
     const res = await api.updateTodolist(idTodolist, title)
-    if(res.resultCode === 0){
-      dispatch(updateTodolistAC(idTodolist, title))
-    }else{
+    if (res.resultCode === 0) {
+      dispatch(updateTodolistAC({idTodolist, title}))
+    } else {
       alert(res.messages[0])
     }
-  }catch (e){
+  } catch (e) {
     alert(e)
-  }finally {
-    dispatch(changeStatusUpdateTodolistAC('succeeded', idTodolist))
+  } finally {
+    dispatch(changeStatusUpdateTodolistAC({status: 'succeeded', idTodolist}))
   }
 }
 
-export const removeTodolist = (idTodolist: string):AppThunkType => async dispatch => {
-  dispatch(setStatusTodolistsAC('loading'))
-  dispatch(changeStatusRemoveTodolistAC(idTodolist, 'loading'))
+export const removeTodolist = (idTodolist: string) => async (dispatch: Dispatch) => {
+  dispatch(setStatusTodolistsAC({status: 'loading'}))
+  dispatch(changeStatusRemoveTodolistAC({idTodolist, status: 'loading'}))
   try {
     const res = await api.removeTodolist(idTodolist)
-    if(res.resultCode === 0) {
-      dispatch(removeTodolistAC(idTodolist))
+    if (res.resultCode === 0) {
+      dispatch(removeTodolistAC({idTodolist}))
     }
-  }catch (e) {
+  } catch (e) {
     alert(e)
-  }finally {
-    dispatch(setStatusTodolistsAC('succeeded'))
-    dispatch(changeStatusRemoveTodolistAC(idTodolist, 'succeeded'))
+  } finally {
+    dispatch(setStatusTodolistsAC({status: 'succeeded'}))
+    dispatch(changeStatusRemoveTodolistAC({idTodolist, status: 'succeeded'}))
   }
 }

@@ -5,15 +5,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import {useSelector} from "react-redux";
-import {AppStateType, useAppDispatch} from "../../Store/store";
+import {AppStateType, useAppDispatch, useAppSelector} from "../../Store/store";
 import {RequestStatusType} from "../../Store/appReducer";
 import {logoutTC} from "../../Store/authReducer";
 
 const Header = () => {
 
   const statusTodolistLoading = useSelector((state: AppStateType): RequestStatusType => state.app.statusTodolists)
-  const login = useSelector((state: AppStateType) => state.authReducer.login)
-  const isLogged = useSelector((state: AppStateType): boolean => state.authReducer.isLogged)
+  const isLogged = useAppSelector(state => state.authReducer.isLogged)
+  const login = useAppSelector(state => state.authReducer.authData.login)
   const dispatch = useAppDispatch()
 
 

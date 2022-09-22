@@ -16,9 +16,9 @@ beforeEach(() => {
   }
 })
 
-test('loading todolists successfully',() => {
-  const action = setStatusTodolistsAC('succeeded')
-  const newState = appReducer(initialState, action)
-
-  expect(newState.statusTodolists).toBe('succeeded')
-})
+// test('loading todolists successfully',() => {
+//   const action = setStatusTodolistsAC('succeeded')
+//   const newState = appReducer(initialState, action)
+//
+//   expect(newState.statusTodolists).toBe('succeeded')
+// })

@@ -1,9 +1,8 @@
 import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useEffect, useState} from 'react';
 import styles from './Todolist.module.scss'
 import {TaskType, TodolistType} from "../../API/api";
-import {AppStateType, useAppDispatch} from "../../Store/store";
+import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {addTask, getTasksForTodolist, removeTask, updateTask} from "../../Store/taskReducer";
-import {useSelector} from "react-redux";
 import Task from "./Task/Task";
 import {removeTodolist, updateTodolist} from "../../Store/todolistsReducer";
 import {RequestStatusType} from "../../Store/appReducer";
@@ -33,7 +32,7 @@ const Todolist: React.FC<PropsType> = ({
   const {title} = data
   const idTodolist = data.id
   const dispatch = useAppDispatch()
-  const taskList = useSelector((state: AppStateType): Array<TaskType> => state.tasks[idTodolist])
+  const taskList = useAppSelector(state => state.tasks[idTodolist])
 
   const [value, setValue] = useState('')
 
@@ -74,12 +73,6 @@ const Todolist: React.FC<PropsType> = ({
     <div className={styles.todolistWrapper}>
       <div className={styles.todolistHeader}>
           <EditableSpan value={title} handleChangeText={callbackUpdateTodolist}/>
-        {/*<button onClick={handleClickRemoveTodolist}*/}
-        {/*        title={'remove todolist'}*/}
-        {/*        disabled={statusRemoveTodolist === 'loading'}*/}
-        {/*>*/}
-        {/*  X*/}
-        {/*</button>*/}
         <IconButton
           onClick={handleClickRemoveTodolist}
           title={'remove todolist'}
@@ -109,7 +102,7 @@ const Todolist: React.FC<PropsType> = ({
         ><AddCircle color={'primary'}/></IconButton>
       </div>
       <div className={styles.tasksListWrapper}>
-        {taskList.length > 0 && taskList.map(item => (
+        {taskList && taskList.map(item => (
           <Task
             key={item.id}
             task={item}
