@@ -31,18 +31,28 @@ beforeEach(() => {
   ]
 })
 
-// test('add todoolist', () => {
-//   const newTodolist = {id: '005', title: 'title 005', addedDate: '01.01.01', order: 1}
-//   const newState = todolistsReducer(initialState, addTodolistsAC(newTodolist))
-//   expect(newState.length).toBe(5)
-//   expect(newState.find(item => item.id === newTodolist.id)).toEqual(newTodolist)
-// })
-// test('update todolist', () => {
-//   const newState = todolistsReducer(initialState, updateTodolistAC('001', 'new title'))
-//   expect(newState.find(item => item.id === '001')?.title).toBe('new title')
-// })
-// test('remove todolist', () => {
-//   const newState = todolistsReducer(initialState, removeTodolistAC('003'))
-//   expect(newState.length).toBe(3)
-//   expect(newState.find(item => item.id === '003')).toBe(undefined)
-// })
+test('add todoolist', () => {
+  const newTodolist = {
+    id: '005',
+    title: 'title 005',
+    addedDate: '01.01.01',
+    order: 1,
+    statusGetTaskForTodolist: "idle",
+    statusRemoveTodolist: "idle",
+    statusRemoveTask: 'idle',
+    statusAddTask: "idle",
+    statusUpdateTodolist: 'idle'
+  }
+  const newState = todolistsReducer(initialState, addTodolistsAC({todolist: newTodolist}))
+  expect(newState.length).toBe(5)
+  expect(newState.find(item => item.id === newTodolist.id)).toEqual(newTodolist)
+})
+test('update todolist', () => {
+  const newState = todolistsReducer(initialState, updateTodolistAC({idTodolist: '001', title: 'new title'}))
+  expect(newState.find(item => item.id === '001')?.title).toBe('new title')
+})
+test('remove todolist', () => {
+  const newState = todolistsReducer(initialState, removeTodolistAC({idTodolist: '003'}))
+  expect(newState.length).toBe(3)
+  expect(newState.find(item => item.id === '003')).toBe(undefined)
+})
