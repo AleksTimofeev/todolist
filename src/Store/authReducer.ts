@@ -1,7 +1,7 @@
 import {api, AuthMeRequestType} from "../API/api";
 import {setStatusTodolistsAC} from "./appReducer";
 import {AppThunkType} from "./store";
-import {createSlice, Dispatch, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, Dispatch, PayloadAction} from "@reduxjs/toolkit";
 
 
 type InitialStateType = {
@@ -20,14 +20,41 @@ const initialState: InitialStateType = {
   isLogged: false
 }
 
+export const authMe = createAsyncThunk(
+  'auth/authMe', async (arg, thunkAPI) => {
+    try {
+      const res = await api.authMe()
+      if (res.resultCode === 0) {
+        return {authData: res.data}
+      }
+      else{
+        return thunkAPI.rejectWithValue({error: 'some error'})
+      }
+    }catch (e) {
+      return thunkAPI.rejectWithValue({error: 'some error'})
+    }finally {
+      thunkAPI.dispatch(authDataLoading({value: false}))
+    }
+  }
+)
+export const authMeTC = () => async (dispatch: Dispatch) => {
+  try {
+
+
+  } catch (e) {
+    alert(e)
+  } finally {
+    dispatch(authDataLoading({value: false}))
+  }
+}
 const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
   reducers: {
-    authMeAC: (state, action: PayloadAction<{ authData: AuthMeRequestType }>) => {
-      state.authData = action.payload.authData
-      state.isLogged = true
-    },
+    // authMeAC: (state, action: PayloadAction<{ authData: AuthMeRequestType }>) => {
+    //   state.authData = action.payload.authData
+    //   state.isLogged = true
+    // },
     authDataLoading: (state, action: PayloadAction<{ value: boolean }>) => {
       state.authDataLoading = action.payload.value
     },
@@ -35,11 +62,19 @@ const authSlice = createSlice({
       state.authData = {id: null, login: null, email: null}
       state.isLogged = false
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(authMe.fulfilled, (state, action) => {
+      if(action.payload){
+        state.authData = action.payload.authData
+        state.isLogged = true
+      }
+    })
   }
 })
 
 export const authReducer = authSlice.reducer
-export const {authMeAC, authDataLoading, logoutAC} = authSlice.actions
+export const {/*authMeAC*/ authDataLoading, logoutAC} = authSlice.actions
 
 export const logoutTC = (): AppThunkType => async dispatch => {
   try {
@@ -70,16 +105,15 @@ export const loginTC = (email: string, password: string, rememberMe: boolean): A
     dispatch(setStatusTodolistsAC({status: 'succeeded'}))
   }
 }
-export const authMeTC = () => async (dispatch: Dispatch) => {
-  try {
-    const res = await api.authMe()
-    if (res.resultCode === 0) {
-      dispatch(authMeAC({authData: res.data}))
-    }
-  } catch (e) {
-    alert(e)
-  } finally {
-    dispatch(authDataLoading({value: false}))
-  }
-
-}
+// export const authMeTC = () => async (dispatch: Dispatch) => {
+//   try {
+//     const res = await api.authMe()
+//     if (res.resultCode === 0) {
+//       dispatch(authMeAC({authData: res.data}))
+//     }
+//   } catch (e) {
+//     alert(e)
+//   } finally {
+//     dispatch(authDataLoading({value: false}))
+//   }
+// }
