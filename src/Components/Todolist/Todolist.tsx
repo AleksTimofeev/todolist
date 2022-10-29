@@ -1,10 +1,17 @@
-import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useEffect, useState} from 'react';
+import React, {
+  ChangeEvent,
+  DetailedHTMLProps,
+  InputHTMLAttributes,
+  MouseEventHandler,
+  useEffect,
+  useState
+} from 'react';
 import styles from './Todolist.module.scss'
 import {TaskType, TodolistType} from "../../API/api";
 import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {addTask, getTasksForTodolist, removeTask, updateTask} from "../../Store/taskReducer";
 import Task from "./Task/Task";
-import {removeTodolist, updateTodolist} from "../../Store/todolistsReducer";
+import {removeTodolist, updateTodolist, /*updateTodolist*/} from "../../Store/todolistsReducer";
 import {RequestStatusType} from "../../Store/appReducer";
 import {LinearProgress, TextField} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -53,10 +60,10 @@ const Todolist: React.FC<PropsType> = ({
   }
 
   const handleClickRemoveTodolist = () => {
-    dispatch(removeTodolist(idTodolist))
+    dispatch(removeTodolist({idTodolist}))
   }
   const callbackUpdateTodolist = (title: string) => {
-    dispatch(updateTodolist(idTodolist, title))
+    dispatch(updateTodolist({idTodolist, title}))
   }
   const callbackRemoveTask = (idTask: string) => {
     dispatch(removeTask(idTodolist, idTask))
@@ -72,7 +79,7 @@ const Todolist: React.FC<PropsType> = ({
   return (
     <div className={styles.todolistWrapper}>
       <div className={styles.todolistHeader}>
-          <EditableSpan value={title} handleChangeText={callbackUpdateTodolist}/>
+          <EditableSpan value={title} handleChangeText={callbackUpdateTodolist} />
         <IconButton
           onClick={handleClickRemoveTodolist}
           title={'remove todolist'}

@@ -77,8 +77,8 @@ export const api = {
     return instance.post<BaseRequestType<{ item: TodolistType }>>('todo-lists', {title: title})
       .then(res => res.data)
   },
-  updateTodolist(idTodolist: string, title: string) {
-    return instance.put<BaseRequestType>(`todo-lists/${idTodolist}`, {title: title})
+  updateTodolist(data: {idTodolist: string, title: string}) {
+    return instance.put<BaseRequestType>(`todo-lists/${data.idTodolist}`, {title: data.title})
       .then(res => res.data)
   },
   removeTodolist(idTodolist: string) {
