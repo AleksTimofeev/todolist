@@ -1,7 +1,6 @@
 import {api, AuthMeRequestType} from "../API/api";
 import {setStatusTodolistsAC} from "./appReducer";
-import {AppThunkType} from "./store";
-import {createAsyncThunk, createSlice, Dispatch, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 type InitialStateType = {
@@ -37,16 +36,42 @@ export const authMe = createAsyncThunk(
     }
   }
 )
-export const authMeTC = () => async (dispatch: Dispatch) => {
-  try {
 
-
-  } catch (e) {
-    alert(e)
-  } finally {
-    dispatch(authDataLoading({value: false}))
+export const logout = createAsyncThunk(
+  'auth/logout', async(arg, thunkAPI) => {
+    try {
+      const res = await api.logout()
+      if (res.resultCode === 0) {
+        return
+      } else {
+        alert(res.messages[0])
+        thunkAPI.rejectWithValue({message: res.messages[0]})
+      }
+    } catch (e) {
+      alert(e)
+      thunkAPI.rejectWithValue({message: 'error'})
+    }
   }
-}
+)
+
+export const login = createAsyncThunk(
+  'auth/login', async(arg:{email: string, password: string, rememberMe: boolean}, thunkAPI) => {
+    thunkAPI.dispatch(setStatusTodolistsAC({status: 'loading'}))
+    try {
+      const res = await api.login(arg.email, arg.password, arg.rememberMe)
+      if (res.resultCode === 0) {
+        thunkAPI.dispatch(authMe())
+      } else {
+        alert(res.messages[0])
+      }
+    } catch (e) {
+      alert(e)
+    } finally {
+      thunkAPI.dispatch(setStatusTodolistsAC({status: 'succeeded'}))
+    }
+  }
+)
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
@@ -54,10 +79,6 @@ const authSlice = createSlice({
     authDataLoading: (state, action: PayloadAction<{ value: boolean }>) => {
       state.authDataLoading = action.payload.value
     },
-    logoutAC(state){
-      state.authData = {id: null, login: null, email: null}
-      state.isLogged = false
-    }
   },
   extraReducers: (builder) => {
     builder.addCase(authMe.fulfilled, (state, action) => {
@@ -66,38 +87,12 @@ const authSlice = createSlice({
         state.isLogged = true
       }
     })
+    builder.addCase(logout.fulfilled, (state) => {
+      state.authData = {id: null, login: null, email: null}
+      state.isLogged = false
+    })
   }
 })
 
 export const authReducer = authSlice.reducer
-export const {authDataLoading, logoutAC} = authSlice.actions
-
-export const logoutTC = (): AppThunkType => async dispatch => {
-  try {
-    const res = await api.logout()
-    if (res.resultCode === 0) {
-      dispatch(logoutAC())
-    } else {
-      alert(res.messages[0])
-    }
-  } catch (e) {
-    alert(e)
-  }
-
-}
-export const loginTC = (email: string, password: string, rememberMe: boolean): AppThunkType => async dispatch => {
-
-  dispatch(setStatusTodolistsAC({status: 'loading'}))
-  try {
-    const res = await api.login(email, password, rememberMe)
-    if (res.resultCode === 0) {
-      dispatch(authMeTC())
-    } else {
-      alert(res.messages[0])
-    }
-  } catch (e) {
-    alert(e)
-  } finally {
-    dispatch(setStatusTodolistsAC({status: 'succeeded'}))
-  }
-}
+export const {authDataLoading} = authSlice.actions

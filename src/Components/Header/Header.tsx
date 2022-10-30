@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import {useSelector} from "react-redux";
 import {AppStateType, useAppDispatch, useAppSelector} from "../../Store/store";
 import {RequestStatusType} from "../../Store/appReducer";
-import {logoutTC} from "../../Store/authReducer";
+import {logout} from "../../Store/authReducer";
 
 const Header = () => {
 
@@ -28,7 +28,7 @@ const Header = () => {
 
 
   const handleLogout = () => {
-    dispatch(logoutTC())
+    dispatch(logout())
   }
 
   return (

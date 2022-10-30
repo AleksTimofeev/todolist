@@ -10,7 +10,7 @@ import {TaskType, TodolistType} from "../../API/api";
 import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {addTask, getTasksForTodolist, removeTask, updateTask} from "../../Store/taskReducer";
 import Task from "./Task/Task";
-import {removeTodolist, updateTodolist, /*updateTodolist*/} from "../../Store/todolistsReducer";
+import {removeTodolist, updateTodolist} from "../../Store/todolistsReducer";
 import {RequestStatusType} from "../../Store/appReducer";
 import {LinearProgress, TextField} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -73,7 +73,7 @@ const Todolist: React.FC<PropsType> = ({
 
   useEffect(() => {
     dispatch(getTasksForTodolist(idTodolist))
-  }, [])
+  },[])
 
   return (
     <div className={styles.todolistWrapper}>
