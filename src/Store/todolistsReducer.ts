@@ -83,8 +83,6 @@ export const removeTodolist = createAsyncThunk<{idTodolist: string}, {idTodolist
   }
 )
 
-// const initialState: FullTodolistType = []
-
 const todolistsSlice = createSlice({
   name: 'todolists',
   initialState: [] as FullTodolistType,

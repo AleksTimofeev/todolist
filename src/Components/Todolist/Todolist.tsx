@@ -2,7 +2,6 @@ import React, {
   ChangeEvent,
   DetailedHTMLProps,
   InputHTMLAttributes,
-  MouseEventHandler,
   useEffect,
   useState
 } from 'react';
@@ -48,13 +47,13 @@ const Todolist: React.FC<PropsType> = ({
   }
   const handleOnEnter = (e: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
     if (e.key === 'Enter' && value.trim().length > 2) {
-      dispatch(addTask(idTodolist, value))
+      dispatch(addTask({idTodolist, titleTask: value}))
       setValue('')
     }
   }
   const handleAddTask = () => {
     if (value.trim().length > 2) {
-      dispatch(addTask(idTodolist, value))
+      dispatch(addTask({idTodolist, titleTask: value}))
       setValue('')
     }
   }
@@ -66,7 +65,7 @@ const Todolist: React.FC<PropsType> = ({
     dispatch(updateTodolist({idTodolist, title}))
   }
   const callbackRemoveTask = (idTask: string) => {
-    dispatch(removeTask(idTodolist, idTask))
+    dispatch(removeTask({idTodolist, idTask}))
   }
   const callbackUpdateTask = (newTask: TaskType) => {
     dispatch(updateTask(newTask))

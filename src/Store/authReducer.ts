@@ -51,10 +51,6 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
   reducers: {
-    // authMeAC: (state, action: PayloadAction<{ authData: AuthMeRequestType }>) => {
-    //   state.authData = action.payload.authData
-    //   state.isLogged = true
-    // },
     authDataLoading: (state, action: PayloadAction<{ value: boolean }>) => {
       state.authDataLoading = action.payload.value
     },
@@ -74,7 +70,7 @@ const authSlice = createSlice({
 })
 
 export const authReducer = authSlice.reducer
-export const {/*authMeAC*/ authDataLoading, logoutAC} = authSlice.actions
+export const {authDataLoading, logoutAC} = authSlice.actions
 
 export const logoutTC = (): AppThunkType => async dispatch => {
   try {
@@ -105,15 +101,3 @@ export const loginTC = (email: string, password: string, rememberMe: boolean): A
     dispatch(setStatusTodolistsAC({status: 'succeeded'}))
   }
 }
-// export const authMeTC = () => async (dispatch: Dispatch) => {
-//   try {
-//     const res = await api.authMe()
-//     if (res.resultCode === 0) {
-//       dispatch(authMeAC({authData: res.data}))
-//     }
-//   } catch (e) {
-//     alert(e)
-//   } finally {
-//     dispatch(authDataLoading({value: false}))
-//   }
-// }
