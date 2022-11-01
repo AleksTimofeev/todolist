@@ -30,7 +30,7 @@ const appReducerSlice = createSlice({
     setStatusErrorMessage: (state, action: PayloadAction<string>) => {
       state.statusErrorMessage = action.payload
     },
-    setAppError: (state, action: PayloadAction<string>) => {
+    setAppError: (state, action: PayloadAction<string | null>) => {
       state.appError = action.payload
     }
   },
