@@ -4,6 +4,8 @@ import {
 } from "./todolistsReducer";
 import {api, TaskType} from "../API/api";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import axios from "axios";
+import {setAppError} from "./appReducer";
 
 type InitialType = {
   [key: string]: Array<TaskType>
@@ -16,7 +18,10 @@ export const getTasksForTodolist = createAsyncThunk(
       const res = await api.getTasksForTodolist(idTodolist)
       return {tasks: res.items, idTodolist}
     } catch (e) {
-      alert(e)
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
     } finally {
       thunkAPI.dispatch(changeStatusUpdateTodolistAC({status: 'succeeded', idTodolist}))
     }
@@ -29,11 +34,14 @@ export const updateTask = createAsyncThunk(
       if (res.resultCode === 0) {
         return {task: res.data.item}
       } else {
-        alert(res.messages[0])
+        thunkAPI.dispatch(setAppError(res.messages[0]))
         return thunkAPI.rejectWithValue({message: 'some error'})
       }
     } catch (e) {
-      alert(e)
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
       return thunkAPI.rejectWithValue({message: 'network error'})
     }
   }
@@ -47,11 +55,15 @@ export const addTask = createAsyncThunk(
       if (res.resultCode === 0) {
         return {task: res.data.item}
       } else {
+        thunkAPI.dispatch(setAppError(res.messages[0]))
         thunkAPI.rejectWithValue({message: 'some error'})
       }
     } catch (e) {
       thunkAPI.rejectWithValue({message: 'network error'})
-      alert(e)
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
     } finally {
       thunkAPI.dispatch(changeStatusUpdateTodolistAC({status: 'succeeded', idTodolist: arg.idTodolist}))
     }
@@ -68,11 +80,14 @@ export const removeTask = createAsyncThunk(
       if (res.resultCode === 0) {
         return {idTodolist: arg.idTodolist, idTask: arg.idTask}
       } else {
-        alert(res.messages[0])
+        thunkAPI.dispatch(setAppError(res.messages[0]))
         thunkAPI.rejectWithValue({message: 'some error'})
       }
     } catch (e) {
-      alert(e)
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
       thunkAPI.rejectWithValue({message: 'network error'})
     } finally {
       thunkAPI.dispatch(changeStatusUpdateTodolistAC({status: 'succeeded', idTodolist: arg.idTodolist}))
