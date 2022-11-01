@@ -1,6 +1,7 @@
 import {api, TodolistType} from "../API/api";
-import {RequestStatusType, setStatusTodolistsAC} from "./appReducer";
+import {RequestStatusType, setAppError, setStatusTodolistsAC} from "./appReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import axios from "axios";
 
 export type FullTodolistType = Array<TodolistType & {
   statusRemoveTodolist: RequestStatusType
@@ -17,7 +18,10 @@ export const getTodolists = createAsyncThunk(
     const res = await api.getTodolists()
     return {todolists: res}
   } catch (e) {
-    alert(e)
+    if(axios.isAxiosError(e)){
+      console.log(e.message)
+      thunkAPI.dispatch(setAppError(e.message))
+    }
     return {todolists: []}
   } finally {
     thunkAPI.dispatch(setStatusTodolistsAC({status: 'succeeded'}))
@@ -32,10 +36,13 @@ export const addTodolist = createAsyncThunk(
     if (res.resultCode === 0) {
       return {todolist: res.data.item}
     } else {
-      alert(res.messages[0])
+      thunkAPI.dispatch(setAppError(res.messages[0]))
     }
   } catch (e) {
-    alert(e)
+    if(axios.isAxiosError(e)){
+      console.log(e.message)
+      thunkAPI.dispatch(setAppError(e.message))
+    }
   } finally {
     thunkAPI.dispatch(setStatusTodolistsAC({status: 'succeeded'}))
   }
@@ -55,11 +62,14 @@ export const updateTodolist = createAsyncThunk<UpdateTodolistType, UpdateTodolis
       if (res.resultCode === 0) {
         return param
       } else {
-        alert(res.messages[0])
+        thunkAPI.dispatch(setAppError(res.messages[0]))
         return thunkAPI.rejectWithValue({error: 'some error', idTodolist: param.idTodolist})
       }
     } catch (e) {
-      alert(e)
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
       return thunkAPI.rejectWithValue({error: 'some error', idTodolist: param.idTodolist})
     }finally {
       thunkAPI.dispatch(changeStatusUpdateTodolistAC({status: 'succeeded', idTodolist: param.idTodolist}))
@@ -74,6 +84,10 @@ export const removeTodolist = createAsyncThunk<{idTodolist: string}, {idTodolist
       const res = await api.removeTodolist(param.idTodolist)
       return param
     }catch (e: any) {
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
       return thunkAPI.rejectWithValue({error: e.message})
     }
     finally {
