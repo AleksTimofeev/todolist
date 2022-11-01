@@ -7,6 +7,7 @@ import Header from "./Components/Header/Header";
 import Body from "./Components/Body/Body";
 import Login from "./Components/Login/Login";
 import PageLoader from "./Components/Loaders/PageLoader";
+import {SnackbarError} from "./Components/ServerError/SnackbarError";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
             <Route path={'login'} element={<Login/>}/>
           </Routes>
         </>}
+      <SnackbarError/>
     </div>
   );
 }
