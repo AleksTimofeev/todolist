@@ -1,6 +1,7 @@
 import {api, AuthMeRequestType} from "../API/api";
-import {setStatusTodolistsAC} from "./appReducer";
+import {setAppError, setStatusTodolistsAC} from "./appReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import axios from "axios";
 
 
 type InitialStateType = {
@@ -27,9 +28,14 @@ export const authMe = createAsyncThunk(
         return {authData: res.data}
       }
       else{
+        thunkAPI.dispatch(setAppError(res.messages[0]))
         return thunkAPI.rejectWithValue({error: 'some error'})
       }
     }catch (e) {
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
       return thunkAPI.rejectWithValue({error: 'some error'})
     }finally {
       thunkAPI.dispatch(authDataLoading({value: false}))
@@ -44,11 +50,14 @@ export const logout = createAsyncThunk(
       if (res.resultCode === 0) {
         return
       } else {
-        alert(res.messages[0])
+        thunkAPI.dispatch(setAppError(res.messages[0]))
         thunkAPI.rejectWithValue({message: res.messages[0]})
       }
     } catch (e) {
-      alert(e)
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
       thunkAPI.rejectWithValue({message: 'error'})
     }
   }
@@ -62,10 +71,13 @@ export const login = createAsyncThunk(
       if (res.resultCode === 0) {
         thunkAPI.dispatch(authMe())
       } else {
-        alert(res.messages[0])
+        thunkAPI.dispatch(setAppError(res.messages[0]))
       }
     } catch (e) {
-      alert(e)
+      if(axios.isAxiosError(e)){
+        console.log(e.message)
+        thunkAPI.dispatch(setAppError(e.message))
+      }
     } finally {
       thunkAPI.dispatch(setStatusTodolistsAC({status: 'succeeded'}))
     }
