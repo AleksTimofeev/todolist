@@ -6,6 +6,7 @@ import TaskDescription from "./TaskDescription";
 import {RequestStatusType} from "../../../Store/appReducer";
 import IconButton from "@mui/material/IconButton";
 import {Delete} from "@mui/icons-material";
+import {Checkbox} from "@mui/material";
 
 type PropsType = {
   task: TaskType
@@ -18,11 +19,15 @@ const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask
 
   const [showDescription, setShowDescription] = useState(false)
 
-  const updateTask = (title: string) => {
+  const updateTaskTitle = (title: string) => {
     if (title.length > 2) {
       const newTask = {...task, title}
       callbackUpdateTask(newTask)
     }
+  }
+  const handleChangeStatus = () => {
+    const newStatus = task.status === 0 ? 1 : 0
+    callbackUpdateTask({...task, status: newStatus})
   }
   const removeTask = () => {
     callbackRemoveTask(task.id)
@@ -32,14 +37,13 @@ const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask
     setShowDescription(true)
   }
 
-  const style = task.status === 1 ? styles.middle : task.status === 2 ? styles.high : styles.low
-
   return (
-    <div onDoubleClick={handleShowDescription} className={`${styles.wrapper} ${style}`}>
+    <div onDoubleClick={handleShowDescription} className={`${styles.wrapper}`}>
+      <Checkbox checked={task.status === 1} onChange={handleChangeStatus}/>
       <EditableSpan
         className={styles.task}
         value={task.title}
-        handleChangeText={updateTask}/>
+        handleChangeText={updateTaskTitle}/>
       {/*{showDescription ? <TaskDescription data={task} /> : <span>{task.title}</span>}*/}
       {/*<button disabled={statusRemoveTask === 'loading'} onClick={removeTask}>X</button>*/}
       <IconButton

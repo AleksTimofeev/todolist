@@ -16,6 +16,7 @@ import {LinearProgress, TextField} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {AddCircle, Delete} from "@mui/icons-material";
 import EditableSpan from "../EditableSpan/EditableSpan";
+import {FilterTasks} from "./FilterTasks/FilterTasks";
 
 type PropsType = {
   data: TodolistType
@@ -25,6 +26,7 @@ type PropsType = {
   statusAddTask: RequestStatusType
   statusUpdateTodolist: RequestStatusType
 }
+export type FilterTasksType = 'all' | 'completed' | 'active'
 
 const Todolist: React.FC<PropsType> = ({
                                          data,
@@ -41,6 +43,7 @@ const Todolist: React.FC<PropsType> = ({
   const taskList = useAppSelector(state => state.tasks[idTodolist])
 
   const [value, setValue] = useState('')
+  const [filterTasks, setFilterTasks] = useState('all')
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value)
@@ -69,6 +72,9 @@ const Todolist: React.FC<PropsType> = ({
   }
   const callbackUpdateTask = (newTask: TaskType) => {
     dispatch(updateTask(newTask))
+  }
+  const callbackChangeFilterTasks = (filter: FilterTasksType) => {
+    setFilterTasks(filter)
   }
 
   useEffect(() => {
@@ -108,7 +114,15 @@ const Todolist: React.FC<PropsType> = ({
         ><AddCircle color={'primary'}/></IconButton>
       </div>
       <div className={styles.tasksListWrapper}>
-        {taskList && taskList.map(item => (
+        {taskList && taskList.filter(task => {
+          if(filterTasks === 'active'){
+            return task.status === 0
+          } if (filterTasks === 'completed'){
+            return task.status === 1
+          } else {
+            return task
+          }
+        }).map(item => (
           <Task
             key={item.id}
             task={item}
@@ -118,6 +132,7 @@ const Todolist: React.FC<PropsType> = ({
           />
         ))}
       </div>
+      <FilterTasks callbackChangeFilterTasks={callbackChangeFilterTasks} />
     </div>
   );
 };
