@@ -11,7 +11,6 @@ import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {addTask, getTasksForTodolist, removeTask, updateTask} from "../../Store/taskReducer";
 import Task from "./Task/Task";
 import {removeTodolist, updateTodolist} from "../../Store/todolistsReducer";
-import {RequestStatusType} from "../../Store/appReducer";
 import {LinearProgress, TextField} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {AddCircle, Delete} from "@mui/icons-material";
@@ -20,27 +19,16 @@ import {FilterTasks} from "./FilterTasks/FilterTasks";
 
 type PropsType = {
   data: TodolistType
-  statusGetTaskForTodolist: RequestStatusType
-  statusRemoveTodolist: RequestStatusType
-  statusRemoveTask: RequestStatusType
-  statusAddTask: RequestStatusType
-  statusUpdateTodolist: RequestStatusType
 }
 export type FilterTasksType = 'all' | 'completed' | 'active'
 
-const Todolist: React.FC<PropsType> = ({
-                                         data,
-                                         statusGetTaskForTodolist,
-                                         statusRemoveTodolist,
-                                         statusRemoveTask,
-                                         statusAddTask,
-                                         statusUpdateTodolist
-                                       }) => {
+const Todolist: React.FC<PropsType> = ({data}) => {
 
   const {title} = data
   const idTodolist = data.id
   const dispatch = useAppDispatch()
   const taskList = useAppSelector(state => state.tasks[idTodolist])
+  const todolistStatus = useAppSelector(state => state.app.todolistStatus.find(td => td.idTodolist === data.id))
 
   const [value, setValue] = useState('')
   const [filterTasks, setFilterTasks] = useState('all')
@@ -88,17 +76,17 @@ const Todolist: React.FC<PropsType> = ({
         <IconButton
           onClick={handleClickRemoveTodolist}
           title={'remove todolist'}
-          disabled={statusRemoveTodolist === 'loading'}
+          disabled={todolistStatus?.status === 'loading'}
         >
           <Delete />
         </IconButton>
       </div>
       <div className={styles.loadingLinear}>
-        {statusUpdateTodolist === 'loading' && <LinearProgress/>}
+        {todolistStatus?.status === 'loading' && <LinearProgress/>}
       </div>
       <div className={styles.addTask}>
         <TextField
-          disabled={statusGetTaskForTodolist === 'loading'}
+          disabled={todolistStatus?.status === 'loading'}
           id="standard-basic"
           label={'Add task'}
           variant="standard"
@@ -110,7 +98,7 @@ const Todolist: React.FC<PropsType> = ({
         <IconButton
           size={'small'}
           onClick={handleAddTask}
-          disabled={statusAddTask === 'loading' || statusGetTaskForTodolist === 'loading'}
+          disabled={todolistStatus?.status === 'loading'}
         ><AddCircle color={'primary'}/></IconButton>
       </div>
       <div className={styles.tasksListWrapper}>
@@ -128,7 +116,7 @@ const Todolist: React.FC<PropsType> = ({
             task={item}
             callbackUpdateTask={callbackUpdateTask}
             callbackRemoveTask={callbackRemoveTask}
-            statusRemoveTask={statusRemoveTask}
+            statusRemoveTask={'idle'}//-----------------------------------
           />
         ))}
       </div>

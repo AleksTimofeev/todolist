@@ -1,5 +1,5 @@
 import {api, AuthMeRequestType} from "../API/api";
-import {setAppError, setStatusTodolistsAC} from "./appReducer";
+import {setAppError, setAppStatus} from "./appReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -65,7 +65,7 @@ export const logout = createAsyncThunk(
 
 export const login = createAsyncThunk(
   'auth/login', async(arg:{email: string, password: string, rememberMe: boolean}, thunkAPI) => {
-    thunkAPI.dispatch(setStatusTodolistsAC({status: 'loading'}))
+    thunkAPI.dispatch(setAppStatus('loading'))
     try {
       const res = await api.login(arg.email, arg.password, arg.rememberMe)
       if (res.resultCode === 0) {
@@ -79,7 +79,7 @@ export const login = createAsyncThunk(
         thunkAPI.dispatch(setAppError(e.message))
       }
     } finally {
-      thunkAPI.dispatch(setStatusTodolistsAC({status: 'succeeded'}))
+      thunkAPI.dispatch(setAppStatus('succeeded'))
     }
   }
 )

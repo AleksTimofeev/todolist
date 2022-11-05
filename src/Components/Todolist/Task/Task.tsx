@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {TaskType} from "../../../API/api";
 import styles from './Task.module.scss'
 import EditableSpan from "../../EditableSpan/EditableSpan";
-import TaskDescription from "./TaskDescription";
 import {RequestStatusType} from "../../../Store/appReducer";
 import IconButton from "@mui/material/IconButton";
 import {Delete} from "@mui/icons-material";
 import {Checkbox} from "@mui/material";
+import {useAppSelector} from "../../../Store/store";
 
 type PropsType = {
   task: TaskType
@@ -17,7 +17,7 @@ type PropsType = {
 
 const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask, statusRemoveTask}) => {
 
-  const [showDescription, setShowDescription] = useState(false)
+  const taskStatus = useAppSelector(state => state.app.taskStatus).find(t => t.idTask === task.id)?.status
 
   const updateTaskTitle = (title: string) => {
     if (title.length > 2) {
@@ -33,22 +33,22 @@ const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask
     callbackRemoveTask(task.id)
   }
 
-  const handleShowDescription = () => {
-    setShowDescription(true)
-  }
+  const wrapperStyle = `${styles.wrapper} ${taskStatus && taskStatus === 'loading' ? styles.statusLoading : ''}`
 
   return (
-    <div onDoubleClick={handleShowDescription} className={`${styles.wrapper}`}>
-      <Checkbox checked={task.status === 1} onChange={handleChangeStatus}/>
+    <div className={wrapperStyle}>
+      <Checkbox
+        checked={task.status === 1}
+        onChange={handleChangeStatus}
+        disabled={taskStatus && taskStatus === 'loading'}
+      />
       <EditableSpan
         className={styles.task}
         value={task.title}
         handleChangeText={updateTaskTitle}/>
-      {/*{showDescription ? <TaskDescription data={task} /> : <span>{task.title}</span>}*/}
-      {/*<button disabled={statusRemoveTask === 'loading'} onClick={removeTask}>X</button>*/}
       <IconButton
         size={'small'}
-        disabled={statusRemoveTask === 'loading'} onClick={removeTask}
+        disabled={taskStatus && taskStatus === 'loading'} onClick={removeTask}
       >
         <Delete />
       </IconButton>

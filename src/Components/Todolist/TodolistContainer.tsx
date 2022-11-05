@@ -1,19 +1,18 @@
 import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
-import {AppStateType, useAppDispatch} from "../../Store/store";
+import {AppStateType, useAppDispatch, useAppSelector} from "../../Store/store";
 import {addTodolist, FullTodolistType, getTodolists} from "../../Store/todolistsReducer";
 import Todolist from "./Todolist";
 import styles from './Todolist.module.scss'
 import {TextField} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import {RequestStatusType} from "../../Store/appReducer";
 import {AddCircle} from "@mui/icons-material";
 
 const TodolistContainer = () => {
 
   const dispatch = useAppDispatch()
   const todolists = useSelector((state: AppStateType):FullTodolistType => state.todolists)
-  const statusTodolists = useSelector((state: AppStateType): RequestStatusType => state.app.statusTodolists)
+  const appStatus = useAppSelector(state => state.app.appStatus)
   const [value, setValue] = useState('')
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,17 +50,12 @@ const TodolistContainer = () => {
         <IconButton
                 size={'small'}
                 onClick={handleAddTodolist}
-                disabled={statusTodolists === 'loading'}
+                disabled={appStatus === 'loading'}
         ><AddCircle color={'primary'} /></IconButton>
       </div>
       {todolists.length > 0 && todolists.map(item => (
         <Todolist key={item.id}
                   data={item}
-                  statusGetTaskForTodolist={item.statusGetTaskForTodolist}
-                  statusRemoveTodolist={item.statusRemoveTodolist}
-                  statusRemoveTask={item.statusRemoveTask}
-                  statusAddTask={item.statusAddTask}
-                  statusUpdateTodolist={item.statusUpdateTodolist}
         />
       ))}
     </div>

@@ -4,15 +4,12 @@ import {AppBar, Box, Button, IconButton, LinearProgress, Toolbar, Typography} fr
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {useSelector} from "react-redux";
-import {AppStateType, useAppDispatch, useAppSelector} from "../../Store/store";
-import {RequestStatusType} from "../../Store/appReducer";
+import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {logout} from "../../Store/authReducer";
 
 const Header = () => {
 
-  const statusTodolistLoading = useSelector((state: AppStateType): RequestStatusType => state.app.statusTodolists)
-  const isLogged = useAppSelector(state => state.authReducer.isLogged)
+  const appStatus = useAppSelector(state => state.app.appStatus)
   const login = useAppSelector(state => state.authReducer.authData.login)
   const dispatch = useAppDispatch()
 
@@ -87,7 +84,7 @@ const Header = () => {
         </AppBar>
       </Box>
       <div className={styles.loadingLinear}>
-        {statusTodolistLoading === 'loading' && <LinearProgress/>}
+        {appStatus === 'loading' && <LinearProgress/>}
       </div>
 
     </div>
