@@ -2,6 +2,7 @@ import {api, TodolistType} from "../API/api";
 import {setAppError, setAppStatus, setTodolistStatus} from "./appReducer";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
+import {logout} from "./authReducer";
 
 export type FullTodolistType = Array<TodolistType>
 
@@ -121,6 +122,9 @@ const todolistsSlice = createSlice({
     })
     builder.addCase(removeTodolist.fulfilled, (state, action) => {
         return state.filter(item => item.id !== action.payload.idTodolist)
+    })
+    builder.addCase(logout.fulfilled, (state) => {
+      return []
     })
   }
 })

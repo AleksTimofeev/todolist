@@ -5,6 +5,7 @@ import {api, TaskType} from "../API/api";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 import {setAppError, setTaskStatus, setTodolistStatus} from "./appReducer";
+import {logout} from "./authReducer";
 
 export type TaskReducerInitialType = {
   [key: string]: Array<TaskType>
@@ -17,7 +18,7 @@ export const getTasksForTodolist = createAsyncThunk(
       const res = await api.getTasksForTodolist(idTodolist)
       return {tasks: res.items, idTodolist}
     } catch (e) {
-      if(axios.isAxiosError(e)){
+      if (axios.isAxiosError(e)) {
         console.log(e.message)
         thunkAPI.dispatch(setAppError(e.message))
       }
@@ -38,13 +39,12 @@ export const updateTask = createAsyncThunk(
         return thunkAPI.rejectWithValue({message: 'some error'})
       }
     } catch (e) {
-      if(axios.isAxiosError(e)){
+      if (axios.isAxiosError(e)) {
         console.log(e.message)
         thunkAPI.dispatch(setAppError(e.message))
       }
       return thunkAPI.rejectWithValue({message: 'network error'})
-    }
-    finally {
+    } finally {
       thunkAPI.dispatch(setTaskStatus({idTodolist: task.todoListId, idTask: task.id, status: 'succeeded'}))
     }
   }
@@ -63,7 +63,7 @@ export const addTask = createAsyncThunk(
       }
     } catch (e) {
       thunkAPI.rejectWithValue({message: 'network error'})
-      if(axios.isAxiosError(e)){
+      if (axios.isAxiosError(e)) {
         console.log(e.message)
         thunkAPI.dispatch(setAppError(e.message))
       }
@@ -88,7 +88,7 @@ export const removeTask = createAsyncThunk(
         thunkAPI.rejectWithValue({message: 'some error'})
       }
     } catch (e) {
-      if(axios.isAxiosError(e)){
+      if (axios.isAxiosError(e)) {
         console.log(e.message)
         thunkAPI.dispatch(setAppError(e.message))
       }
@@ -139,6 +139,10 @@ const taskSlice = createSlice({
         ]
       }
     })
+    builder.addCase(logout.fulfilled, (state) => {
+      return {}
+      }
+    )
   }
 })
 

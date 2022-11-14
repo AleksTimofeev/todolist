@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {removeTodolist} from "./todolistsReducer";
+import {logout} from "./authReducer";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -56,6 +57,10 @@ const appReducerSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(removeTodolist.rejected, (state, action) => {
       return {...state, error: action.payload?.error}
+    })
+    builder.addCase(logout.fulfilled, (state) => {
+      state.todolistStatus = []
+      state.taskStatus = []
     })
 
   }
