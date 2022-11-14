@@ -6,7 +6,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 import {setAppError, setTaskStatus, setTodolistStatus} from "./appReducer";
 
-type InitialType = {
+export type TaskReducerInitialType = {
   [key: string]: Array<TaskType>
 }
 
@@ -103,7 +103,7 @@ export const removeTask = createAsyncThunk(
 
 const taskSlice = createSlice({
   name: 'task',
-  initialState: {} as InitialType,
+  initialState: {} as TaskReducerInitialType,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(addTodolist.fulfilled, (state, action) => {
