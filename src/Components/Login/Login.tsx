@@ -42,7 +42,7 @@ const Login = () => {
   useEffect(() => {
     if (isLogged) {
       formik.resetForm()
-      navigate('/')
+      navigate('/todolist')
     }
   }, [isLogged])
 

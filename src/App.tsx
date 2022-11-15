@@ -35,10 +35,10 @@ function App() {
           <Header/>
           <Routes>
 
-            <Route path={'/'} element={<>
+            <Route path={'/todolist'} element={<>
               <Body/>
             </>}/>
-            <Route path={'login'} element={<Login/>}/>
+            <Route path={'/login'} element={<Login/>}/>
           </Routes>
         </>}
       <SnackbarError/>
