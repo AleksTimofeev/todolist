@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
-import styles from './Logon.module.scss'
+import styles from './Logon.module.css'
 import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {useNavigate} from "react-router-dom";
-import {Grid, TextField} from "@mui/material";
+import {Button, Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
 import {login} from "../../Store/authReducer";
 
@@ -47,32 +47,35 @@ const Login = () => {
   }, [isLogged])
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form className={styles.loginContainer} onSubmit={formik.handleSubmit}>
       <Grid
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item xs={6}>
+        <Grid item xs={6} className={styles.inputWrapper}>
           <TextField
             error={!!formik.errors.email && formik.touched.email}
             label={'email'}
             variant="filled"
+            className={styles.input}
             {...formik.getFieldProps('email')}
           />
 
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={8} className={styles.inputWrapper}>
           <TextField
             error={!!formik.errors.password && formik.touched.password}
             label={'password'}
             variant="filled"
             type={'password'}
+            className={styles.input}
             {...formik.getFieldProps('password')}
           />
         </Grid>
-        <button type="submit">Submit</button>
+        {/*<button type="submit">Submit</button>*/}
+        <Button variant="contained" type="submit">LOGIN</Button>
 
       </Grid>
     </form>

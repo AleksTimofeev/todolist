@@ -6,18 +6,22 @@ import {RequestStatusType} from "../../../Store/appReducer";
 import IconButton from "@mui/material/IconButton";
 import {Delete} from "@mui/icons-material";
 import {Checkbox} from "@mui/material";
-import {useAppSelector} from "../../../Store/store";
 
 type PropsType = {
   task: TaskType
+  taskStatus: RequestStatusType | undefined
   callbackUpdateTask: (newTask: TaskType) => void
   callbackRemoveTask: (idTask: string) => void
-  statusRemoveTask: RequestStatusType
 }
 
-const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask, statusRemoveTask}) => {
+const Task: React.FC<PropsType> = ({
+                                     task,
+                                     callbackUpdateTask,
+                                     callbackRemoveTask,
+                                     // statusRemoveTask,
+  taskStatus
+                                   }) => {
 
-  const taskStatus = useAppSelector(state => state.app.taskStatus).find(t => t.idTask === task.id)?.status
 
   const updateTaskTitle = (title: string) => {
     if (title.length > 2) {
@@ -50,11 +54,11 @@ const Task: React.FC<PropsType> = ({task, callbackUpdateTask, callbackRemoveTask
         size={'small'}
         disabled={taskStatus && taskStatus === 'loading'} onClick={removeTask}
       >
-        <Delete />
+        <Delete/>
       </IconButton>
     </div>
 
   );
 };
 
-export default Task;
+export default React.memo(Task)

@@ -1,0 +1,13 @@
+.loginContainer {
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.input {
+  width: 350px;
+
+}
+.loginContainer .inputWrapper {
+  margin-bottom: 20px;
+}

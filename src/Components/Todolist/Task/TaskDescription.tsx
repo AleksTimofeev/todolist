@@ -4,7 +4,7 @@ import EditableSpan from "../../EditableSpan/EditableSpan";
 
 type PropsType = { data: TaskType }
 
-const TaskDescription: React.FC<PropsType> = ({data}) => {
+export const TaskDescription: React.FC<PropsType> = ({data}) => {
 
 
 
@@ -15,6 +15,4 @@ const TaskDescription: React.FC<PropsType> = ({data}) => {
       <span>{data.addedDate}</span>
     </div>
   );
-};
-
-export default TaskDescription;
+}

@@ -8,6 +8,7 @@ import Body from "./Components/Body/Body";
 import Login from "./Components/Login/Login";
 import PageLoader from "./Components/Loaders/PageLoader";
 import {SnackbarError} from "./Components/ServerError/SnackbarError";
+import styles from './App.module.scss'
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
 
 
   return (
-    <div>
+    <div className={styles.appWrapper}>
       {authDataLoading ?
         <PageLoader/> :
         <>

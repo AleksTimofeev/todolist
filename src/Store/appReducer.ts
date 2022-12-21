@@ -36,9 +36,14 @@ const appReducerSlice = createSlice({
     setTodolistStatus: (state, action: PayloadAction<{idTodolist: string, status: RequestStatusType}>) => {
       const todolist = state.todolistStatus.find(item => item.idTodolist === action.payload.idTodolist)
       if(todolist){
-        state.todolistStatus = state.todolistStatus.map(
-          item => item.idTodolist === action.payload.idTodolist ? action.payload : item
-        )
+        // state.todolistStatus = state.todolistStatus.map(
+        //   item => item.idTodolist === action.payload.idTodolist ? action.payload : item
+        // )
+        state.todolistStatus.forEach(item => {
+          if (item.idTodolist === action.payload.idTodolist) {
+            item.status = action.payload.status
+          }
+        })
       } else {
         state.todolistStatus = [...state.todolistStatus, action.payload]
       }

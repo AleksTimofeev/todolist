@@ -29,6 +29,7 @@ const Todolist: React.FC<PropsType> = ({data}) => {
   const dispatch = useAppDispatch()
   const taskList = useAppSelector(state => state.tasks[idTodolist])
   const todolistStatus = useAppSelector(state => state.app.todolistStatus.find(td => td.idTodolist === data.id))
+  const taskStatus = useAppSelector(state => state.app.taskStatus).filter(item => item.idTodolist === idTodolist)
 
   const [value, setValue] = useState('')
   const [filterTasks, setFilterTasks] = useState('all')
@@ -114,9 +115,9 @@ const Todolist: React.FC<PropsType> = ({data}) => {
           <Task
             key={item.id}
             task={item}
+            taskStatus={taskStatus.find(i => i.idTask === item.id)?.status}
             callbackUpdateTask={callbackUpdateTask}
             callbackRemoveTask={callbackRemoveTask}
-            statusRemoveTask={'idle'}//-----------------------------------
           />
         ))}
       </div>
