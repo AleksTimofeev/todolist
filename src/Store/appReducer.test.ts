@@ -1,13 +1,13 @@
 import {appReducer, RequestStatusType, setTaskStatus, setTodolistStatus} from "./appReducer";
 
 
-let initialState = {
+let initialState: ReturnType<typeof appReducer> /*= {
   appStatus: 'idle' as RequestStatusType,
   todolistStatus: [],
   taskStatus: [],
   statusErrorMessage: null,
   appError: null
-}
+}*/
 
 
 beforeEach(() => {
@@ -16,7 +16,8 @@ beforeEach(() => {
     todolistStatus: [],
     taskStatus: [],
     statusErrorMessage: null,
-    appError: null
+    appError: null,
+    showTaskDescription: false
   }
 })
 

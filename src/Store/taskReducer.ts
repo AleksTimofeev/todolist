@@ -112,7 +112,9 @@ const taskSlice = createSlice({
       }
     })
     builder.addCase(removeTodolist.fulfilled, (state, action) => {
-      delete state[action.payload.idTodolist]
+      if(action.payload?.idTodolist){
+        delete state[action.payload.idTodolist]
+      }
     })
     builder.addCase(getTasksForTodolist.fulfilled, (state, action) => {
       if (action.payload?.idTodolist) {

@@ -48,27 +48,23 @@ type UpdateTodolistType = {
   idTodolist: string, title: string
 }
 
-export const updateTodolist = createAsyncThunk<UpdateTodolistType, UpdateTodolistType, {
-  rejectValue: { error: string, idTodolist: string }
-}>(
-  'todolists/updateTodolist', async (param, thunkAPI) => {
-    thunkAPI.dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'loading'}))
+export const updateTodolist = createAsyncThunk(
+  'todolists/updateTodolist', async (param: UpdateTodolistType, {dispatch, rejectWithValue}) => {
+    dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'loading'}))
     try {
       const res = await api.updateTodolist(param)
       if (res.resultCode === 0) {
         return param
       } else {
-        thunkAPI.dispatch(setAppError(res.messages[0]))
-        return thunkAPI.rejectWithValue({error: 'some error', idTodolist: param.idTodolist})
+        dispatch(setAppError('some error'))
       }
     } catch (e) {
       if(axios.isAxiosError(e)){
-        console.log(e.message)
-        thunkAPI.dispatch(setAppError(e.message))
+        dispatch(setAppError(e.message))
       }
-      return thunkAPI.rejectWithValue({error: 'some error', idTodolist: param.idTodolist})
+      dispatch(setAppError('network error'))
     }finally {
-      thunkAPI.dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'succeeded'}))
+      dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'succeeded'}))
     }
 })
 
@@ -81,10 +77,9 @@ export const removeTodolist = createAsyncThunk(
       return param
     }catch (e) {
       if(axios.isAxiosError(e)){
-        const error: string = e.message ? e.message : ''
-        return rejectWithValue(error)
+        dispatch(setAppError(e.message))
       }else{
-        return rejectWithValue('network error.')
+        dispatch(setAppError('network error.'))
       }
     }
     finally {
@@ -117,12 +112,12 @@ const todolistsSlice = createSlice({
     builder.addCase(updateTodolist.fulfilled, (state, action) => {
       if(action && action.payload){
         return state.map(item => (
-          item.id === action.payload.idTodolist ? {...item, title: action.payload.title} : item
+          item.id === action.payload?.idTodolist ? {...item, title: action.payload.title} : item
         ))
       }
     })
     builder.addCase(removeTodolist.fulfilled, (state, action) => {
-        return state.filter(item => item.id !== action.payload.idTodolist)
+        return state.filter(item => item.id !== action.payload?.idTodolist)
     })
     builder.addCase(logout.fulfilled, (state) => {
       return []
