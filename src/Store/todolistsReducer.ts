@@ -72,23 +72,24 @@ export const updateTodolist = createAsyncThunk<UpdateTodolistType, UpdateTodolis
     }
 })
 
-export const removeTodolist = createAsyncThunk<{idTodolist: string}, {idTodolist: string}, {rejectValue: {error: string}}>(
-  'todolists/removeTodolist', async (param, thunkAPI) => {
-    thunkAPI.dispatch(setAppStatus('loading'))
-    thunkAPI.dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'loading'}))
+export const removeTodolist = createAsyncThunk(
+  'todolists/removeTodolist', async (param: {idTodolist: string}, {dispatch, rejectWithValue}) => {
+    dispatch(setAppStatus('loading'))
+    dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'loading'}))
     try {
       const res = await api.removeTodolist(param.idTodolist)
       return param
-    }catch (e: any) {
+    }catch (e) {
       if(axios.isAxiosError(e)){
-        console.log(e.message)
-        thunkAPI.dispatch(setAppError(e.message))
+        const error: string = e.message ? e.message : ''
+        return rejectWithValue(error)
+      }else{
+        return rejectWithValue('network error.')
       }
-      return thunkAPI.rejectWithValue({error: e.message})
     }
     finally {
-      thunkAPI.dispatch(setAppStatus('succeeded'))
-      thunkAPI.dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'loading'}))
+      dispatch(setAppStatus('succeeded'))
+      dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'succeeded'}))
     }
   }
 )

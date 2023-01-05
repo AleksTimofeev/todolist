@@ -28,7 +28,7 @@ const Todolist: React.FC<PropsType> = ({data}) => {
   const idTodolist = data.id
   const dispatch = useAppDispatch()
   const taskList = useAppSelector(state => state.tasks[idTodolist])
-  const todolistStatus = useAppSelector(state => state.app.todolistStatus.find(td => td.idTodolist === data.id))
+  const todolistStatus = useAppSelector(state => state.app.todolistStatus.find(td => td.idTodolist === idTodolist))
   const taskStatus = useAppSelector(state => state.app.taskStatus).filter(item => item.idTodolist === idTodolist)
 
   const [value, setValue] = useState('')

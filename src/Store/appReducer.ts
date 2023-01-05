@@ -10,6 +10,7 @@ type InitialStateType = {
   taskStatus: Array<{idTodolist: string, idTask: string, status: RequestStatusType}>
   statusErrorMessage: string | null
   appError: string | null
+  showTaskDescription: boolean
 }
 
 const initialState: InitialStateType = {
@@ -17,7 +18,8 @@ const initialState: InitialStateType = {
   todolistStatus: [],
   taskStatus: [],
   statusErrorMessage: null,
-  appError: null
+  appError: null,
+  showTaskDescription: false
 }
 
 const appReducerSlice = createSlice({
@@ -61,7 +63,7 @@ const appReducerSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(removeTodolist.rejected, (state, action) => {
-      return {...state, error: action.payload?.error}
+      return {...state, error: action.payload}
     })
     builder.addCase(logout.fulfilled, (state) => {
       state.todolistStatus = []
