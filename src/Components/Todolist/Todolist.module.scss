@@ -10,7 +10,7 @@
   flex-direction: row;
 }
 .todolistWrapper {
-  position: relative;
+  //position: relative;
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -20,7 +20,17 @@
   margin: 10px;
   padding: 0 10px 10px;
 }
-
+.taskDescription {
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  background: teal;
+  opacity: .7;
+  z-index: 10;
+}
 .todolistHeader {
   height: 50px;
   display: flex;

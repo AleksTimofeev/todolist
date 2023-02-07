@@ -17,7 +17,7 @@ beforeEach(() => {
     taskStatus: [],
     statusErrorMessage: null,
     appError: null,
-    showTaskDescription: false
+    showTaskDescription: null
   }
 })
 

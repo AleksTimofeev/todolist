@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {removeTodolist, updateTodolist} from "./todolistsReducer";
 import {logout} from "./authReducer";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -10,7 +9,7 @@ type InitialStateType = {
   taskStatus: Array<{idTodolist: string, idTask: string, status: RequestStatusType}>
   statusErrorMessage: string | null
   appError: string | null
-  showTaskDescription: boolean
+  showTaskDescription: string | null
 }
 
 const initialState: InitialStateType = {
@@ -19,7 +18,7 @@ const initialState: InitialStateType = {
   taskStatus: [],
   statusErrorMessage: null,
   appError: null,
-  showTaskDescription: false
+  showTaskDescription: null
 }
 
 const appReducerSlice = createSlice({
@@ -59,6 +58,12 @@ const appReducerSlice = createSlice({
       } else {
         state.taskStatus = [...state.taskStatus, action.payload]
       }
+    },
+    showTaskDescription: (state, action: PayloadAction<{idTask: string}>) => {
+      state.showTaskDescription = action.payload.idTask
+    },
+    closeTaskDescription: (state) => {
+      state.showTaskDescription = null
     }
   },
   extraReducers: builder => {
@@ -70,6 +75,14 @@ const appReducerSlice = createSlice({
   }
 })
 
-export const {setStatusErrorMessage, setAppError, setAppStatus, setTodolistStatus, setTaskStatus} = appReducerSlice.actions
+export const {
+  setStatusErrorMessage,
+  setAppError,
+  setAppStatus,
+  setTodolistStatus,
+  setTaskStatus,
+  showTaskDescription,
+  closeTaskDescription,
+} = appReducerSlice.actions
 
 export const appReducer = appReducerSlice.reducer

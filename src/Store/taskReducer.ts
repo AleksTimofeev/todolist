@@ -129,10 +129,6 @@ const taskSlice = createSlice({
       }
     })
     builder.addCase(updateTask.fulfilled, (state, action) => {
-      // state[action.payload.task.todoListId] = [
-      //   ...state[action.payload.task.todoListId].map(
-      //     item => item.id === action.payload.task.id ? {...action.payload.task} : item
-      //   )]
       state[action.payload.task.todoListId].forEach(item => {
         if(item.id === action.payload.task.id){
           Object.assign(item, action.payload.task)
