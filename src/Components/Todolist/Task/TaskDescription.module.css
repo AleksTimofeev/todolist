@@ -23,20 +23,22 @@
   position: relative;
   box-shadow: 0 0 7px -3px #bebebe;
 }
-.closeDescription {
+.wrapperDescription .closeDescription {
   position: absolute;
   top: 0;
   right: 0;
 }
 .taskHeader {
+  width: 90%;
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 .taskHeader span {
-
+  padding-top: 4px;
 }
 .title {
+  margin-right: 20px;
   font-size: 1.3em;
 }
 .taskDescriptionInput {
@@ -57,12 +59,12 @@
 }
 .deadlineInputContainer input {
   position: absolute;
-  width: 30px;
+  width: 18px;
   height: 30px;
   z-index: 2;
   opacity: 0;
 }
-.deadlineCalendarIcon {
+.deadlineWrapper .deadlineCalendarIcon {
   position: absolute;
   padding: 0;
 

@@ -67,7 +67,7 @@ export const TaskDescription: React.FC<PropsType> = ({
             value={taskTitle}
             handleChangeText={updateTaskTitle}
           />
-          <span>{taskAddedDate}</span>
+          <span>({taskAddedDate})</span>
         </div>
         <Textarea
           className={styles.taskDescriptionInput}
