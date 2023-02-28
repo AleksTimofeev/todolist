@@ -55,19 +55,14 @@ const Task: React.FC<PropsType> = ({
       {taskDescription === task.id &&
         <TaskDescription
           data={task}
-          updateTaskTitle={updateTaskTitle}
-          updateTaskDescription={updateTaskDescription}
+          callbackUpdateTask={callbackUpdateTask}
         />}
       <Checkbox
         checked={task.status === 1}
         onChange={handleChangeStatus}
         disabled={taskStatus && taskStatus === 'loading'}
       />
-      <span>{task.title}</span>
-      {/*<EditableSpan*/}
-      {/*  className={styles.task}*/}
-      {/*  value={task.title}*/}
-      {/*  handleChangeText={updateTaskTitle}/>*/}
+      <span title={task.description ? task.description : ''}>{task.title}</span>
       <IconButton
         size={'small'}
         style={{marginLeft: 'auto'}}
