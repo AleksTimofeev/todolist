@@ -68,9 +68,9 @@ const Todolist: React.FC<PropsType> = ({data}) => {
       setShowTitleInput(false)
     }
   }
-  // const handleBlurTitleInput = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
-  //   console.log(e.currentTarget)
-  // }
+  const handleBlurTitleInput = () => {
+    setShowTitleInput(false)
+  }
   const callbackRemoveTask = (idTask: string) => {
     dispatch(removeTask({idTodolist, idTask}))
   }
@@ -98,7 +98,7 @@ const Todolist: React.FC<PropsType> = ({data}) => {
             value={titleValue}
             onChange={handleChangeTitle}
             onKeyPress={handleOnEnterTitle}
-            // onBlur={handleBlurTitleInput}
+            onBlur={handleBlurTitleInput}
           /> :
           <span className={styles.title}>{title}</span>
         }
