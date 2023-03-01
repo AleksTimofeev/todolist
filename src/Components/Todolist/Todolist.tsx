@@ -10,11 +10,12 @@ import {TaskType, TodolistType} from "../../API/api";
 import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {addTask, getTasksForTodolist, removeTask, updateTask} from "../../Store/taskReducer";
 import Task from "./Task/Task";
-import {removeTodolist, updateTodolist} from "../../Store/todolistsReducer";
+import {addTodolist, removeTodolist, updateTodolist} from "../../Store/todolistsReducer";
 import {LinearProgress, TextField} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {AddCircle, Delete} from "@mui/icons-material";
 import EditableSpan from "../EditableSpan/EditableSpan";
+import EditIcon from '@mui/icons-material/Edit';
 import {FilterTasks} from "./FilterTasks/FilterTasks";
 
 type PropsType = {
@@ -32,6 +33,8 @@ const Todolist: React.FC<PropsType> = ({data}) => {
   const taskStatus = useAppSelector(state => state.app.taskStatus).filter(item => item.idTodolist === idTodolist)
 
   const [value, setValue] = useState('')
+  const [titleValue, setTitleValue] = useState(title)
+  const [showTitleInput, setShowTitleInput] = useState(false)
   const [filterTasks, setFilterTasks] = useState('all')
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,9 +56,21 @@ const Todolist: React.FC<PropsType> = ({data}) => {
   const handleClickRemoveTodolist = () => {
     dispatch(removeTodolist({idTodolist}))
   }
-  const callbackUpdateTodolist = (title: string) => {
-    dispatch(updateTodolist({idTodolist, title}))
+  const handleClickChangeTitle = () => {
+    setShowTitleInput(!showTitleInput)
   }
+  const handleChangeTitle = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setTitleValue(e.currentTarget.value)
+  }
+  const handleOnEnterTitle = (e: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
+    if (e.key === 'Enter' && titleValue.trim().length > 2) {
+      dispatch(updateTodolist({idTodolist, title: titleValue}))
+      setShowTitleInput(false)
+    }
+  }
+  // const handleBlurTitleInput = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+  //   console.log(e.currentTarget)
+  // }
   const callbackRemoveTask = (idTask: string) => {
     dispatch(removeTask({idTodolist, idTask}))
   }
@@ -68,18 +83,36 @@ const Todolist: React.FC<PropsType> = ({data}) => {
 
   useEffect(() => {
     dispatch(getTasksForTodolist(idTodolist))
-  },[])
+  }, [])
 
   return (
     <div className={styles.todolistWrapper}>
       <div className={styles.todolistHeader}>
-          <EditableSpan value={title} handleChangeText={callbackUpdateTodolist} />
+
+        {showTitleInput ?
+          <TextField
+            id="standard-basic"
+            label={'edit'}
+            variant="standard"
+            size={'small'}
+            value={titleValue}
+            onChange={handleChangeTitle}
+            onKeyPress={handleOnEnterTitle}
+            // onBlur={handleBlurTitleInput}
+          /> :
+          <span className={styles.title}>{title}</span>
+        }
+        <IconButton
+          onClick={handleClickChangeTitle}
+        >
+          <EditIcon/>
+        </IconButton>
         <IconButton
           onClick={handleClickRemoveTodolist}
           title={'remove todolist'}
           disabled={todolistStatus?.status === 'loading'}
         >
-          <Delete />
+          <Delete/>
         </IconButton>
       </div>
       <div className={styles.loadingLinear}>
@@ -104,9 +137,10 @@ const Todolist: React.FC<PropsType> = ({data}) => {
       </div>
       <div className={styles.tasksListWrapper}>
         {taskList && taskList.filter(task => {
-          if(filterTasks === 'active'){
+          if (filterTasks === 'active') {
             return task.status === 0
-          } if (filterTasks === 'completed'){
+          }
+          if (filterTasks === 'completed') {
             return task.status === 1
           } else {
             return task
@@ -121,7 +155,7 @@ const Todolist: React.FC<PropsType> = ({data}) => {
           />
         ))}
       </div>
-      <FilterTasks callbackChangeFilterTasks={callbackChangeFilterTasks} />
+      <FilterTasks callbackChangeFilterTasks={callbackChangeFilterTasks}/>
     </div>
   );
 };
