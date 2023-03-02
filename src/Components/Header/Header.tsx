@@ -61,10 +61,17 @@ const Header = () => {
               MenuListProps={{
                 'aria-labelledby': 'navigation-button',
               }}
+              className={styles.navigationMenu}
             >
-              <MenuItem onClick={handleCloseNavigation}>
-                <Button color={'inherit'}
-                >Todolist</Button>
+              <MenuItem
+                onClick={handleCloseNavigation}
+              >
+                <NavLink to={'todolist'}>Todolist</NavLink>
+              </MenuItem>
+              <MenuItem
+                onClick={handleCloseNavigation}
+              >
+                <NavLink to={'profile'}>Profile</NavLink>
               </MenuItem>
             </Menu>
             <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
