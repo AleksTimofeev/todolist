@@ -6,6 +6,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import {useAppDispatch, useAppSelector} from "../../Store/store";
 import {logout} from "../../Store/authReducer";
+import {NavLink} from "react-router-dom";
 
 const Header = () => {
 
@@ -23,6 +24,15 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const [anchorNavigation, setAnchorNavigation] = React.useState<null | HTMLElement>(null);
+  const openNavigation = Boolean(anchorNavigation);
+  const handleClickNavigation = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorNavigation(event.currentTarget);
+  };
+  const handleCloseNavigation = () => {
+    setAnchorNavigation(null);
+  };
+
 
   const handleLogout = () => {
     dispatch(logout())
@@ -33,15 +43,30 @@ const Header = () => {
       <Box sx={{flexGrow: 1}}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{mr: 2}}
+            <Button
+              id="navigation-button"
+              aria-controls={open ? 'navigation-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClickNavigation}
+              variant={'outlined'}
             >
-              <MenuIcon/>
-            </IconButton>
+              <MenuIcon style={{color: 'white'}} />
+            </Button>
+            <Menu
+              id="navigation-menu"
+              anchorEl={anchorNavigation}
+              open={openNavigation}
+              onClose={handleCloseNavigation}
+              MenuListProps={{
+                'aria-labelledby': 'navigation-button',
+              }}
+            >
+              <MenuItem onClick={handleCloseNavigation}>
+                <Button color={'inherit'}
+                >Todolist</Button>
+              </MenuItem>
+            </Menu>
             <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
               Todolist
             </Typography>
