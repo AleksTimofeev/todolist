@@ -76,7 +76,11 @@ const Login = () => {
         </Grid>
         {/*<button type="submit">Submit</button>*/}
         <Button variant="contained" type="submit">LOGIN</Button>
-
+        <div className={styles.testLogin}>
+          <span>TEST LOGIN - todolist-test@yandex.ru</span>
+          <br />
+          <span>PASSWORD - test-todolist</span>
+        </div>
       </Grid>
     </form>
   );
