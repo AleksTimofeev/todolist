@@ -9,6 +9,7 @@ import Login from "./Components/Login/Login";
 import PageLoader from "./Components/Loaders/PageLoader";
 import {SnackbarError} from "./Components/ServerError/SnackbarError";
 import styles from './App.module.scss'
+import {SnackbarInfo} from "./Components/ServerError/SnackbarInfo";
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
           </Routes>
         </>}
       <SnackbarError/>
+      <SnackbarInfo />
     </div>
   );
 }

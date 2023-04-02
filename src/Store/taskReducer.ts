@@ -4,7 +4,7 @@ import {
 import {api, TaskType} from "../API/api";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
-import {setAppError, setTaskStatus, setTodolistStatus} from "./appReducer";
+import {setAppError, setAppInfo, setTaskStatus, setTodolistStatus} from "./appReducer";
 import {logout} from "./authReducer";
 
 export type TaskReducerInitialType = {
@@ -33,6 +33,7 @@ export const updateTask = createAsyncThunk(
     try {
       const res = await api.updateTask(task)
       if (res.resultCode === 0) {
+        thunkAPI.dispatch(setAppInfo('Task is updated'))
         return {task: res.data.item}
       } else {
         thunkAPI.dispatch(setAppError(res.messages[0]))
@@ -82,6 +83,7 @@ export const removeTask = createAsyncThunk(
     try {
       const res = await api.removeTask(arg.idTodolist, arg.idTask)
       if (res.resultCode === 0) {
+        thunkAPI.dispatch(setAppInfo('Task is deleted'))
         return {idTodolist: arg.idTodolist, idTask: arg.idTask}
       } else {
         thunkAPI.dispatch(setAppError(res.messages[0]))

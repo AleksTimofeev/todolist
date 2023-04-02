@@ -9,6 +9,7 @@ type InitialStateType = {
   taskStatus: Array<{idTodolist: string, idTask: string, status: RequestStatusType}>
   statusErrorMessage: string | null
   appError: string | null
+  appInfo: string | null
   showTaskDescription: string | null
 }
 
@@ -18,6 +19,7 @@ const initialState: InitialStateType = {
   taskStatus: [],
   statusErrorMessage: null,
   appError: null,
+  appInfo: null,
   showTaskDescription: null
 }
 
@@ -30,6 +32,9 @@ const appReducerSlice = createSlice({
     },
     setAppError: (state, action: PayloadAction<string | null>) => {
       state.appError = action.payload
+    },
+    setAppInfo: (state, action: PayloadAction<string | null>) => {
+      state.appInfo = action.payload
     },
     setAppStatus: (state, action: PayloadAction<RequestStatusType>) => {
       state.appStatus = action.payload
@@ -78,6 +83,7 @@ const appReducerSlice = createSlice({
 export const {
   setStatusErrorMessage,
   setAppError,
+  setAppInfo,
   setAppStatus,
   setTodolistStatus,
   setTaskStatus,
