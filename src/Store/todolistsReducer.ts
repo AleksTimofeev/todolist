@@ -1,5 +1,5 @@
 import {api, TodolistType} from "../API/api";
-import {setAppError, setAppStatus, setTodolistStatus} from "./appReducer";
+import {setAppError, setAppInfo, setAppStatus, setTodolistStatus} from "./appReducer";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 import {logout} from "./authReducer";
@@ -54,6 +54,7 @@ export const updateTodolist = createAsyncThunk(
     try {
       const res = await api.updateTodolist(param)
       if (res.resultCode === 0) {
+        dispatch(setAppInfo('Todolist is updated'))
         return param
       } else {
         dispatch(setAppError('some error'))
@@ -74,6 +75,7 @@ export const removeTodolist = createAsyncThunk(
     dispatch(setTodolistStatus({idTodolist: param.idTodolist, status: 'loading'}))
     try {
       const res = await api.removeTodolist(param.idTodolist)
+      dispatch(setAppInfo('Todolist is deleted'))
       return param
     }catch (e) {
       if(axios.isAxiosError(e)){
