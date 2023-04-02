@@ -8,6 +8,7 @@ import {Delete, OpenInFull} from "@mui/icons-material";
 import {Checkbox} from "@mui/material";
 import {TaskDescription} from "./TaskDescription";
 import {useAppDispatch, useAppSelector} from "../../../Store/store";
+import {getDateForRender} from "../../../utils/getDateForRender";
 
 
 type PropsType = {
@@ -26,6 +27,7 @@ const Task: React.FC<PropsType> = ({
 
   const taskDescription = useAppSelector(store => store.app.showTaskDescription)
   const dispatch = useAppDispatch()
+  const deadlineForRender = getDateForRender(task.deadline!)
 
   const updateTaskTitle = (title: string) => {
     if (title.length > 2) {
@@ -64,7 +66,7 @@ const Task: React.FC<PropsType> = ({
       />
       <div className={styles.taskTitle} title={task.description ? task.description : ''}>
         <span>{task.title}</span>
-        {task.deadline && <span className={styles.deadline}>deadline - {task.deadline.slice(0, 10)}</span>}
+        {task.deadline && <span className={styles.deadline}>deadline - {deadlineForRender}</span>}
       </div>
       <IconButton
         size={'small'}
