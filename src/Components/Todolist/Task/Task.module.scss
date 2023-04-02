@@ -9,6 +9,14 @@
   background: #bebebe;
 
 }
+.taskTitle {
+  display: flex;
+  flex-direction: column;
+
+  .deadline {
+    font-size: 12px;
+  }
+}
 .high {
   background: red;
 }

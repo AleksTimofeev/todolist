@@ -62,7 +62,10 @@ const Task: React.FC<PropsType> = ({
         onChange={handleChangeStatus}
         disabled={taskStatus && taskStatus === 'loading'}
       />
-      <span title={task.description ? task.description : ''}>{task.title}</span>
+      <div className={styles.taskTitle} title={task.description ? task.description : ''}>
+        <span>{task.title}</span>
+        {task.deadline && <span className={styles.deadline}>deadline - {task.deadline.slice(0, 10)}</span>}
+      </div>
       <IconButton
         size={'small'}
         style={{marginLeft: 'auto'}}
