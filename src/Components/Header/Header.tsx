@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Header.module.scss'
-import {AppBar, Box, Button, IconButton, LinearProgress, Toolbar, Typography} from "@mui/material";
+import {AppBar, Box, Button, LinearProgress, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -38,6 +38,8 @@ const Header = () => {
     dispatch(logout())
   }
 
+  const activeLink = (isActive: boolean) => isActive ? `${styles.link} ${styles.activeLink}` : `${styles.link}`
+
   return (
     <div>
       <Box sx={{flexGrow: 1}}>
@@ -51,7 +53,7 @@ const Header = () => {
               onClick={handleClickNavigation}
               variant={'outlined'}
             >
-              <MenuIcon style={{color: 'white'}} />
+              <MenuIcon style={{color: 'white'}}/>
             </Button>
             <Menu
               id="navigation-menu"
@@ -66,12 +68,16 @@ const Header = () => {
               <MenuItem
                 onClick={handleCloseNavigation}
               >
-                <NavLink to={'todolist'}>Todolist</NavLink>
+                <NavLink to={'todolist'}
+                         className={({isActive}) => activeLink(isActive)}
+                >Todolist</NavLink>
               </MenuItem>
               <MenuItem
                 onClick={handleCloseNavigation}
               >
-                <NavLink to={'profile'}>Profile</NavLink>
+                <NavLink to={'profile'}
+                         className={({isActive}) => activeLink(isActive)}
+                >Profile</NavLink>
               </MenuItem>
             </Menu>
             <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
@@ -80,29 +86,29 @@ const Header = () => {
 
             {!!login && <>
               <Button
-              id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-              variant={'contained'}
-            >
-              {login}
-            </Button>
-              <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                variant={'contained'}
               >
-              <MenuItem onClick={handleClose}>
-              <Button color={'inherit'}
-              onClick={handleLogout}
-              >Logout</Button>
-              </MenuItem>
+                {login}
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem onClick={handleClose}>
+                  <Button color={'inherit'}
+                          onClick={handleLogout}
+                  >Logout</Button>
+                </MenuItem>
               </Menu>
             </>}
 

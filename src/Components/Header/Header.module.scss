@@ -8,6 +8,14 @@
 .navigationMenu ul {
   padding: 20px 20px 20px 10px;
 }
+.link {
+  padding: 0 10px;
+  color: black;
+  text-decoration: none;
+}
+.activeLink {
+  border-bottom: 2px solid;
+}
 .loadingLinear {
   height: 4px;
 }
